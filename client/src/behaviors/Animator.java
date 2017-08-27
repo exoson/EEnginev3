@@ -12,7 +12,7 @@ import main.Gameobject;
  *
  * @author Lime
  */
-public class SpecifiedAnimator implements Behavior {
+public class Animator implements Behavior {
 
     private HashMap<String, Animation> anims;
     private String curAnim;
@@ -34,7 +34,7 @@ public class SpecifiedAnimator implements Behavior {
 
     @Override
     public void render(Gameobject go) {
-        Transform tf = (Transform)go.getBehavior("SpecifiedTransform");
+        TransformRoot tf = (TransformRoot)go.getBehavior("Transform");
         Animation animation = anims.get(curAnim);
         if(animation != null) {
             animation.render(tf.getPosition());

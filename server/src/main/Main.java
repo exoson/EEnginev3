@@ -50,16 +50,16 @@ public class Main {
                 if(player == null) return false;
                 float speed = 0.01f;
                 if(Main.getGame().getClientKey(cName, KEY_W)) {
-                    ((Transform)player.getBehavior("SpecifiedTransform")).move(new Vector3f(0, -speed, 0));
+                    ((Transform)player.getBehavior("Transform")).move(new Vector3f(0, -speed, 0));
                 }
                 if(Main.getGame().getClientKey(cName, KEY_A)) {
-                    ((Transform)player.getBehavior("SpecifiedTransform")).move(new Vector3f(-speed, 0, 0));
+                    ((Transform)player.getBehavior("Transform")).move(new Vector3f(-speed, 0, 0));
                 }
                 if(Main.getGame().getClientKey(cName, KEY_S)) {
-                    ((Transform)player.getBehavior("SpecifiedTransform")).move(new Vector3f(0, speed, 0));
+                    ((Transform)player.getBehavior("Transform")).move(new Vector3f(0, speed, 0));
                 }
                 if(Main.getGame().getClientKey(cName, KEY_D)) {
-                    ((Transform)player.getBehavior("SpecifiedTransform")).move(new Vector3f(speed, 0, 0));
+                    ((Transform)player.getBehavior("Transform")).move(new Vector3f(speed, 0, 0));
                 }
                 return false;
             }

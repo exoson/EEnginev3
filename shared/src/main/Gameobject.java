@@ -93,7 +93,7 @@ public class Gameobject {
             String[] subsplit = s.split(":");
             try {
                 String className = subsplit[0];
-                Behavior b = (Behavior)Class.forName("behaviors.Specified" + className).newInstance();
+                Behavior b = (Behavior)Class.forName("behaviors." + className).newInstance();
                 behaviors.add(b);
                 for(int i = 1; i < subsplit.length; i+=2) {
                     state.put(className + subsplit[i], subsplit[i+1]);

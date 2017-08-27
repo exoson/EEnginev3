@@ -1,5 +1,6 @@
 package behaviors;
 
+import main.Behavior;
 import main.Gameobject;
 import math.Vector3f;
 
@@ -7,10 +8,16 @@ import math.Vector3f;
  *
  * @author Lime
  */
-public class SpecifiedTransform extends Transform {
+public class Transform extends TransformRoot {
+    
     
     @Override
     public void update(Gameobject go) {
         position = new Vector3f((String)go.getState("pos"));
+    }
+    
+    @Override
+    public void render(Gameobject go) {
+        
     }
 }

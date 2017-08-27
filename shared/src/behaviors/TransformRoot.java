@@ -8,7 +8,7 @@ import math.Vector3f;
  *
  * @author Lime
  */
-public abstract class Transform implements Behavior {
+public abstract class TransformRoot implements Behavior {
 
     protected Vector3f position, rotation;
     
@@ -21,14 +21,6 @@ public abstract class Transform implements Behavior {
     @Override
     public void render(Gameobject go) {
         
-    }
-    
-    public void move(Vector3f vec) {
-        position = position.add(vec);
-    }
-    
-    public void rotate(Vector3f vec) {
-        rotation = rotation.add(vec);
     }
     
     /**
