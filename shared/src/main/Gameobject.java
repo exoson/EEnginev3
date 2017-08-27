@@ -1,5 +1,10 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -108,5 +113,18 @@ public class Gameobject {
         }
         state.put("init", str);
         return new Gameobject(behaviors, state);
+    }
+    
+    public static Gameobject fromFile(String fileName) {
+        String fullDef = null;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String def = br.readLine();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Gameobject.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Gameobject.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return fromString(fullDef);
     }
 }

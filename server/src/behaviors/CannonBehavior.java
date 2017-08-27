@@ -49,6 +49,6 @@ public class CannonBehavior implements Behavior{
         //int playerId = game.addObject("in;Transform:pos:10,10,0:rot:0,0,0;Animator;TankMovement:speed:10.0:rotSpeed:0.05:client:" + cs.toString());
         String pos = tf.getPosition().add(v).toString();
         String rot = tf.getRotation().toString();
-        return "in;Transform:pos:" + pos + ":rot:" + rot + ":size:10,10,0;Animator;AmmoBehavior:speed:20;";
+        return "in;Transform:pos:" + pos + ":rot:" + rot + ":size:10,10,0;Animator:anims:ammo,default;AmmoBehavior:speed:20;";
     }
 }

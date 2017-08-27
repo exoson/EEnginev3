@@ -20,11 +20,12 @@ public class Animator implements Behavior {
     @Override
     public void start(Gameobject go) {
         anims = new HashMap<>();
-        ArrayList<Frame> frames = new ArrayList<>();
-        frames.add(new Frame(new Sprite(64, 64), 100));
-        Animation anim = new Animation(frames, "default");
-        addAnimation(anim);
-        curAnim = "default";
+        String animList = (String)go.getState("Animatoranims");
+        String[] splitted = animList.split(",");
+        for(int i = 0; i < splitted.length; i+=2) {
+            addAnimation(new Animation(splitted[i], splitted[i+1]));
+        }
+        curAnim = splitted[1];
     }
 
     @Override

@@ -11,6 +11,11 @@ public class Animation
     private int curframe;
     private final String name;
     
+    public Animation(String fileName, String name) {
+        this.frames = Frame.fromFile(fileName);
+        this.name = name;
+    }
+    
     public Animation(ArrayList<Frame> frames, String name) {
         this.name = name;
         this.frames = frames;

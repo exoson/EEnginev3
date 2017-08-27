@@ -1,6 +1,13 @@
 
 package graphics;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import math.Vector2f;
 import math.Vector3f;
 
@@ -56,5 +63,24 @@ public class Frame
      */
     public Sprite getSpr() {
         return spr;
+    }
+    
+    public static ArrayList<Frame> fromFile(String fileName) {
+        ArrayList<Frame> frames = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("../res/animations/" + fileName + ".anim"));
+            String line = br.readLine();
+            String[] split = line.split(",");
+            int sx = Integer.parseInt(split[0]), sy = Integer.parseInt(split[1]);
+            while((line = br.readLine()) != null) {
+                split = line.split(",");
+                frames.add(new Frame(new Sprite(sx, sy, split[0]), Integer.parseInt(split[1])));
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return frames;
     }
 }
