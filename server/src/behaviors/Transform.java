@@ -16,6 +16,7 @@ public class Transform extends TransformRoot {
     public void update(Gameobject go) {
         Main.getGame().updateClients(go.getState("id") + ":Transformpos:" + position.toString());
         Main.getGame().updateClients(go.getState("id") + ":Transformrot:" + rotation.toString());
+        Main.getGame().updateClients(go.getState("id") + ":Transformsize:" + size.toString());
     }
     
     @Override

@@ -1,6 +1,9 @@
 
 package main;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Time 
 {
     public static final long DAMPING = 10000000;
@@ -21,18 +24,27 @@ public class Time
     {
         lasttime = curtime;
         curtime = gettime();
-//        System.out.println("Fps: " + 100 / getdelta());
-//        if(secdel.over())
-//        {
-//            System.out.println("Fps: " + frames);
-//            frames = 0;
-//            secdel.start();
-//        }
-//        else 
-//        {
-//            frames++;
-//        }
+        //System.out.println("Fps: " + 100 / getdelta());
+        /*if(secdel.over())
+        {
+            System.out.println("Fps: " + frames);
+            frames = 0;
+            secdel.start();
+        }
+        else 
+        {
+            frames++;
+        }*/
     }
+    
+    public static void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Time.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void init()
     {
         lasttime = gettime();

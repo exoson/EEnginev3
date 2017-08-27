@@ -103,9 +103,7 @@ public class Sprite
      * @param b blue value of the color
      * @param a alpha value of the color
      */
-    public void render(Vector3f pos,Vector3f rot, Vector2f size, float r, float g, float b, float a)
-    {
-        System.out.println(rot);
+    public void render(Vector3f pos,Vector3f rot, Vector2f size, float r, float g, float b, float a) {
         text.bind();
         shader.enable();
         shader.setUniformMat4f("ml_matrix", Matrix4f.translate(pos).multiply(Matrix4f.rotateZ(rot.getZ())).multiply(Matrix4f.scale(new Vector3f(size.getX()/this.sx,size.getY()/this.sy,1))));
@@ -116,12 +114,10 @@ public class Sprite
         shader.disable();
         text.unbind();
     }
-    public float getsx()
-    {
+    public float getsx() {
         return sx;
     }
-    public float getsy()
-    {
+    public float getsy() {
         return sy;
     }
 }

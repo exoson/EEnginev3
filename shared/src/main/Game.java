@@ -54,9 +54,11 @@ public class Game implements Runnable {
     
     @Override
     public void run() {
+        Time.init();
         gMode.start();
         setFlag("running", true);
         while((boolean)getFlag("running")) {
+            Time.update();
             update();
             render();
         }
@@ -64,7 +66,7 @@ public class Game implements Runnable {
     }
     
     public int addObject(String goSpec) {
-        goSpec += ";id:" + objId;
+        //System.out.println(goSpec);
         addedObjects.add(goSpec);
         return objId++;
     }

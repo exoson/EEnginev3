@@ -15,6 +15,7 @@ public class Transform extends TransformRoot {
     public void update(Gameobject go) {
         position = new Vector3f((String)go.getState("Transformpos"));
         rotation = new Vector3f((String)go.getState("Transformrot"));
+        size = new Vector3f((String)go.getState("Transformsize"));
     }
     
     @Override

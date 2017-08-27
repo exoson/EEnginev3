@@ -36,7 +36,7 @@ public class Main {
         }, new ClientHandler() {
             @Override
             public boolean init(ClientServer cs) {
-                int playerId = game.addObject("in;Transform:pos:10,10,0:rot:0,0,0;Animator;TankMovement:speed:0.01:rotSpeed:0.00003:client:" + cs.toString());
+                int playerId = game.addObject("in;Transform:pos:10,10,0:rot:0,0,0:size:64,64,0;Animator;TankMovement:speed:10.0:rotSpeed:0.05:client:" + cs.toString() + ";CannonBehavior");
                 game.setFlag(cs.toString() + "-player", playerId);
                 return false;
             }
@@ -46,7 +46,9 @@ public class Main {
                 String cName = cs.toString();
                 int KEY_0 = 0x30;
                 int KEY_A = 0x41, KEY_S = 0x53, KEY_W = 0x57, KEY_D = 0x44;
-                Gameobject player = Main.getGame().getObject((int)game.getFlag(cName + "-player"));
+                int playerId = (int)game.getFlag(cName + "-player");
+                Gameobject player = Main.getGame().getObject(playerId);
+                //System.out.println(cs.toString() + "-player, " + playerId);
                 if(player == null) return false;
                 float speed = 0.01f;
                 /*if(Main.getGame().getClientKey(cName, KEY_W)) {

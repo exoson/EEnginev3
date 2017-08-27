@@ -12,13 +12,17 @@ public class ServerGame extends Game {
     
     private final ClientHandler cHandler;
     
+    private final Delay tickDelay;
+    
     public ServerGame(GameMode gMode, ClientHandler cHandler) {
         super(gMode);
+        this.tickDelay = new Delay(1000 / 60);
         this.cHandler = cHandler;
         server = new Server();
         Thread sThread = new Thread(server);
         sThread.setDaemon(true);
         sThread.start();
+        tickDelay.end();
     }
     
     private void updateClients() {
@@ -46,6 +50,8 @@ public class ServerGame extends Game {
     
     @Override
     public void update() {
+        while(!tickDelay.over()) {Time.sleep(1);}
+        tickDelay.start();
         updateClients();
         super.update();
     }
@@ -65,6 +71,12 @@ public class ServerGame extends Game {
     }
     
     @Override
+    public int addObject(String goSpec) {
+        goSpec += ";id:" + objId;
+        return super.addObject(goSpec);
+    }
+    
+    @Override
     public void removeObject(Gameobject go) {
         super.removeObject(go);
         server.broadcast("rm;" + (String)go.getState("id"));
@@ -73,7 +85,6 @@ public class ServerGame extends Game {
     @Override
     public void removeObject(int id) {
         super.removeObject(id);
-        System.out.println("rm;" + id);
         server.broadcast("rm;" + id);
     }
     

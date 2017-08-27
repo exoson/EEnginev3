@@ -10,12 +10,13 @@ import math.Vector3f;
  */
 public abstract class TransformRoot implements Behavior {
 
-    protected Vector3f position, rotation;
+    protected Vector3f position, rotation, size;
     
     @Override
     public void start(Gameobject go) {
         position = new Vector3f((String)go.getState("Transformpos"));
         rotation = new Vector3f((String)go.getState("Transformrot"));
+        size = new Vector3f((String)go.getState("Transformsize"));
     }
     
     @Override
@@ -35,5 +36,15 @@ public abstract class TransformRoot implements Behavior {
      */
     public Vector3f getRotation() {
         return rotation;
+    }
+    
+    public float getSX() {
+        return size.getX();
+    }
+    public float getSY() {
+        return size.getY();
+    }
+    public float getSZ() {
+        return size.getZ();
     }
 }
