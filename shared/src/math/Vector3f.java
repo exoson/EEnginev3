@@ -1,9 +1,11 @@
 
 package math;
 
+import java.util.Random;
+
 public class Vector3f 
 {
-    private float x,y,z;
+    private float x, y, z;
     
     public Vector3f() {
         this(0,0,0);
@@ -20,7 +22,7 @@ public class Vector3f
         this(v.getX(),v.getY(),0);
     }
     
-    public Vector3f(float x,float y,float z) {
+    public Vector3f(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -41,6 +43,9 @@ public class Vector3f
     }
     public Vector3f minus(Vector3f vect) {
         return new Vector3f(x - vect.getX(),y - vect.getY(),z - vect.getZ());
+    }
+    public Vector3f mult(Vector3f vec) {
+        return new Vector3f(x * vec.getX(), y * vec.getY(), z * vec.getZ());
     }
     public Vector3f mult(float mul) {
         return new Vector3f(x * mul,y * mul,z * mul);
@@ -80,4 +85,8 @@ public class Vector3f
         return "" + x + ", " + y + ", " + z;
     }
 
+    public static Vector3f random() {
+        Random rng = new Random();
+        return new Vector3f(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
+    }
 }

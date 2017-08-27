@@ -80,6 +80,10 @@ public class Game implements Runnable {
         return null;
     }
     
+    public ArrayList<Gameobject> getObjects() {
+        return gObjects;
+    }
+    
     protected void initObject(String goSpec) {
         gObjects.add(Gameobject.fromString(goSpec));
     }

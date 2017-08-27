@@ -11,7 +11,7 @@ import math.Vector2f;
  *
  * @author Lime
  */
-public class CannonBehavior implements Behavior{
+public class CannonBehavior implements Behavior {
 
     private String cName;
     private int shootingKey;

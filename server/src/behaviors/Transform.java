@@ -24,6 +24,10 @@ public class Transform extends TransformRoot {
         
     }
     
+    public void setPosition(Vector3f vec) {
+        position = vec;
+    }
+    
     public void move(Vector2f vec) {
         position = position.add(vec);
     }

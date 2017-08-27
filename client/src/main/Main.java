@@ -1,5 +1,6 @@
 package main;
 
+import game.DeathMatch;
 import graphics.Window;
 
 /**
@@ -12,27 +13,7 @@ public class Main {
     
     public static void main(String[] args) {
         init();
-        game = new ClientGame(new GameMode() {
-
-            @Override
-            public void start() {
-                
-            }
-
-            @Override
-            public boolean update() {
-                return false;
-            }
-
-            @Override
-            public void render() {
-            }
-
-            @Override
-            public void reset() {
-                
-            }
-        });
+        game = new ClientGame(new DeathMatch());
         game.run();
         cleanUp();
     }

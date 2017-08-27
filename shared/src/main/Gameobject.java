@@ -134,7 +134,7 @@ public class Gameobject {
         }
     }
     
-    public static String fromFile(String fileName) {
+    private static String fromFile(String fileName) {
         String fullDef = "";
         try {
             BufferedReader br = new BufferedReader(new FileReader("../res/objects/" + fileName + ".obj"));

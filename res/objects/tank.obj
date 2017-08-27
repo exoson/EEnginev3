@@ -1,5 +1,5 @@
 in;
-Transform:pos:10,10,0:rot:0,0,0:size:64,64,0;
+Transform:pos:10,10,0:rot:0,0,0:size:32,48,0;
 Animator:anims:tank,default;
 TankMovement:speed:10.0:rotSpeed:0.05;
 CannonBehavior;
