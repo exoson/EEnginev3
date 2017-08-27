@@ -1,6 +1,6 @@
 package main;
 
-import Main.Client;
+import main.Client;
 import graphics.Camera;
 import graphics.Window;
 import java.io.IOException;
@@ -25,7 +25,9 @@ public class ClientGame extends Game {
         camera = new Camera(Matrix4f.identity());
         try {
             client = new Client();
-            new Thread(client).start();
+            Thread cThread = new Thread(client);
+            cThread.setDaemon(true);
+            cThread.start();
         } catch (IOException ex) {
             Logger.getLogger(ClientGame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,6 +54,22 @@ public class ClientGame extends Game {
         Window.update();
     }
 
+    public void updateStates(String updates) {
+        //System.out.println(updates);
+        for(String up : updates.split(";")) {
+            String[] split = up.split(":");
+            if(split.length == 1) {
+                continue;
+            }
+            try {
+                int objId = Integer.parseInt(split[0]);
+                getObject(objId).setState(split[1], split[2]);
+            } catch (Exception exc) {
+                setFlag(split[0], split[1]);
+            }
+        }
+    }
+    
     /**
      * @return the camera
      */

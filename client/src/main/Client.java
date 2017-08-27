@@ -1,5 +1,4 @@
-
-package Main;
+package main;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,13 +48,15 @@ public class Client implements Runnable{
     @Override
     public void run() {
         running = true;
-        while(running && !client.isClosed())
-        {
+        while(running && !client.isClosed()) {
             String input;
             try {
                 input = in.readLine();
-                if(input.startsWith("in:")) {
-                    Main.getGame().addObject(Gameobject.fromString(input));
+                if(input.startsWith("in;")) {
+                    Main.getGame().addObject(input);
+                }
+                if(input.startsWith("up;")) {
+                    Main.getGame().updateStates(input);
                 }
                 //Game.serverMessage(input);
             } catch (IOException ex) {

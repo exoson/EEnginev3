@@ -30,6 +30,7 @@ public class ClientServer implements Runnable {
     @Override
     public void run() {
         running = true;
+        clientInput = "";
         while(running && !clientSocket.isClosed()) {
             try {
                 clientInput = in.readLine();

@@ -9,9 +9,10 @@ public class Animation
 {
     private final ArrayList<Frame> frames;
     private int curframe;
+    private final String name;
     
-    public Animation(ArrayList<Frame> frames)
-    {
+    public Animation(ArrayList<Frame> frames, String name) {
+        this.name = name;
         this.frames = frames;
         curframe = 0;
     }
@@ -20,12 +21,11 @@ public class Animation
      * @param pos position to render the texture
      * @return True if animation has ended.
      */
-    public boolean render(Vector3f pos)
-    {
+    public boolean render(Vector3f pos) {
         return render(pos,0, new Vector2f(getFrames().get(curframe).getSX(), getFrames().get(curframe).getSY()),1,1,1,1);
     }
     /**
-     * Renders current frame and updates animation with the spcified color
+     * Renders current frame and updates animation with the specified color
      * @param pos position to render the texture
      * @param rot amount to rotate the texture
      * @param size size to be rendered in
@@ -40,7 +40,7 @@ public class Animation
         return render(new Vector3f(pos),rot,size,r,g,b,a);
     }
     /**
-     * Renders current frame and updates animation with the spcified color
+     * Renders current frame and updates animation with the specified color
      * @param pos position to render the texture
      * @param rot amount to rotate the texture
      * @param size size to be rendered in
@@ -68,5 +68,12 @@ public class Animation
      */
     public ArrayList<Frame> getFrames() {
         return frames;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
     }
 }

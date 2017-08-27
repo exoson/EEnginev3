@@ -4,14 +4,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server implements Runnable{
     
-    private ArrayList<ClientServer> clients = new ArrayList<>();
+    private HashMap<String, ClientServer> clients = new HashMap<>();
     private ArrayList<ClientServer> newClients = new ArrayList<>();
+    private ArrayList<ClientServer> removedClients = new ArrayList<>();
     boolean running;
     
 //    public static void main(String[] args) {
@@ -33,18 +35,18 @@ public class Server implements Runnable{
 //    }
     
     public void broadcast(String msg) {
-        for(ClientServer c : getClientServers()) {
+        for(ClientServer c : getClientServers().values()) {
             c.sendMsg(msg);
         }
     }
     
-    public void sendMsg(String msg, int client) {
+    public void sendMsg(String client, String msg) {
         getClientServers().get(client).sendMsg(msg);
     }
     
     private void stop() {
         running = false;
-        for(ClientServer c : getClientServers()) {
+        for(ClientServer c : getClientServers().values()) {
             c.stop();
         }
     }
@@ -74,7 +76,7 @@ public class Server implements Runnable{
     /**
      * @return the list of clients
      */
-    public ArrayList<ClientServer> getClientServers() {
+    public HashMap<String, ClientServer> getClientServers() {
         return clients;
     }
 
@@ -82,17 +84,27 @@ public class Server implements Runnable{
         return newClients;
     }
     
-   public void remove(ClientServer cs) {
-       if(clients.contains(cs)) {
-           clients.remove(cs);
-       }
-       if(newClients.contains(cs)) {
-           newClients.remove(cs);
-       }
-   }
+    public void remove(ClientServer cs) {
+        removedClients.add(cs);
+    }
 
     public void clearAdded() {
-        clients.addAll(newClients);
-        newClients.removeAll(clients);
+        for(ClientServer cs : newClients) {
+            clients.put(cs.toString(), cs);
+        }
+        for(ClientServer cs :clients.values()) {
+            newClients.remove(cs);
+        }
+    }
+    
+    public void clearRemoved() {
+        for(ClientServer cs : removedClients) {
+            if(clients.containsKey(cs.toString())) {
+                clients.remove(cs.toString());
+            }
+            if(newClients.contains(cs)) {
+                newClients.remove(cs);
+            }
+        }
     }
 }

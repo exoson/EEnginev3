@@ -9,9 +9,12 @@ public class Textrenderer
 {
     private static TrueTypeFont font;
     
-    public static void init()
-    {
-        font = new TrueTypeFont(new Font("Times New Roman",0,25), false);
+    public Textrenderer() {
+        this("Times New Roman");
+    }
+    
+    public Textrenderer(String fontName) {
+        font = new TrueTypeFont(new Font(fontName,0,25), false);
 //        font = new TrueTypeFont("chars","res/textures/charLocations.loc");
     }
     /**
@@ -21,8 +24,7 @@ public class Textrenderer
      * @param y y coordinate for where to render the text.
      * @param color
      */
-    public static void drawString(String s,float x,float y,Vector4f color)
-    {
+    public static void drawString(String s,float x,float y,Vector4f color) {
         font.drawString(x, y, s, color);
     }
 }

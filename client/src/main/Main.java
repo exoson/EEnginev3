@@ -42,7 +42,8 @@ public class Main {
     }
 
     public static void cleanUp() {
-
+        Input.cleanUp();
+        Window.cleanUp();
     }
 
     /**

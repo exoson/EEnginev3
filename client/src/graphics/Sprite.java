@@ -7,7 +7,7 @@ import math.Vector4f;
 
 public class Sprite 
 {
-    private static float[] sqrVertices = new float[]{
+    private static float[] sqrVertices = new float[] {
         -0.5f,-0.5f,0,
         +0.5f,-0.5f,0,
         -0.5f,+0.5f,0,
@@ -19,7 +19,7 @@ public class Sprite
         0,1,
         1,1
     };
-    private static byte[] sqrIndices = new byte[]{
+    private static byte[] sqrIndices = new byte[] {
         0,2,1,
         1,2,3
     };
@@ -35,8 +35,7 @@ public class Sprite
      * @param sy vertical size
      * @param texture loads the texture from 'res/textures/texture.png'
      */
-    public Sprite(float sx, float sy,String texture)
-    {
+    public Sprite(float sx, float sy,String texture) {
         Matrix4f scale = Matrix4f.scale(new Vector3f(sx,sy,1));
         text = new Texture(texture);
         shader = Shader.defShader;
@@ -51,8 +50,7 @@ public class Sprite
      * @param texture loads the texture from 'res/textures/texture.png'
      * @param shader loads the shader from 'res/shaders/shader.*'
      */
-    public Sprite(float sx, float sy,String texture,String shader)
-    {
+    public Sprite(float sx, float sy, String texture, String shader) {
         Matrix4f scale = Matrix4f.scale(new Vector3f(sx,sy,1));
         text = new Texture(texture);
         this.shader = new Shader(shader, shader);
@@ -65,24 +63,21 @@ public class Sprite
      * @param sx horizontal size
      * @param sy vertical size
      */
-    public Sprite(float sx, float sy)
-    {
+    public Sprite(float sx, float sy) {
         this(sx,sy,"lol");
     }
     /**
      * Renders the sprite
      * @param pos position to render the texture
      */
-    public void render(Vector3f pos)
-    {
+    public void render(Vector3f pos) {
         render(pos,0,1,1,1,1);
     }
     /**
      * Renders the sprite
      * @param pos position to render the texture
      */
-    public void render(Vector2f pos)
-    {
+    public void render(Vector2f pos) {
         render(new Vector3f(pos));
     }
     /**
@@ -94,8 +89,7 @@ public class Sprite
      * @param b blue value of the color
      * @param a alpha value of the color
      */
-    public void render(Vector3f pos,float rot, float r, float g, float b, float a)
-    {
+    public void render(Vector3f pos,float rot, float r, float g, float b, float a) {
         render(pos, rot, new Vector2f(sx, sy), r, g, b, a);
     }
     public static Vector4f curColor = new Vector4f(.5f,.5f,.5f,1);
