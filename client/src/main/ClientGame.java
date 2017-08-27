@@ -53,6 +53,11 @@ public class ClientGame extends Game {
         camera.disable();
         Window.update();
     }
+    
+    @Override
+    protected void stop() {
+        client.stop();
+    }
 
     public void updateStates(String updates) {
         //System.out.println(updates);

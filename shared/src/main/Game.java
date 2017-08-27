@@ -1,10 +1,7 @@
 package main;
 
-import behaviors.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -63,21 +60,22 @@ public class Game implements Runnable {
             update();
             render();
         }
+        stop();
     }
     
     public int addObject(String goSpec) {
+        goSpec += ";id:" + objId;
         addedObjects.add(goSpec);
         return objId++;
     }
     
     public Gameobject getObject(int id) {
-        if(id < gObjects.size() && id >= 0) 
-            return gObjects.get(id);
+        for(Gameobject go : gObjects) {
+            if((int)go.getState("id") == id) {
+                return go;
+            }
+        }
         return null;
-    }
-    
-    public int getIdOf(Gameobject go) {
-        return gObjects.indexOf(go);
     }
     
     protected void initObject(String goSpec) {
@@ -86,6 +84,15 @@ public class Game implements Runnable {
     
     public void removeObject(Gameobject go) {
         removedObjects.add(go);
+    }
+    
+    public void removeObject(int id) {
+        for(Gameobject go : gObjects) {
+            if((int)go.getState("id") == id) {
+                removedObjects.add(go);
+                break;
+            }
+        }
     }
     
     public Object getFlag(String flagName) {
@@ -98,5 +105,9 @@ public class Game implements Runnable {
     
     public void appendFlag(String flagName, String value) {
         setFlag(flagName, getFlag(flagName) + ";" + value);
+    }
+
+    protected void stop() {
+        
     }
 }

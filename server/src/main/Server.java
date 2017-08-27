@@ -92,12 +92,12 @@ public class Server implements Runnable{
         for(ClientServer cs : newClients) {
             clients.put(cs.toString(), cs);
         }
-        for(ClientServer cs :clients.values()) {
+        for(ClientServer cs : clients.values()) {
             newClients.remove(cs);
         }
     }
     
-    public void clearRemoved() {
+    public void clearRemoved(ClientHandler ch) {
         for(ClientServer cs : removedClients) {
             if(clients.containsKey(cs.toString())) {
                 clients.remove(cs.toString());
@@ -105,6 +105,8 @@ public class Server implements Runnable{
             if(newClients.contains(cs)) {
                 newClients.remove(cs);
             }
+            ch.quit(cs);
         }
+        removedClients.removeAll(removedClients);
     }
 }

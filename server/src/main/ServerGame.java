@@ -24,17 +24,16 @@ public class ServerGame extends Game {
     private void updateClients() {
         for(ClientServer cs : server.getAdded()) {
             setFlag(cs.toString() + "-update", "");
+            for(Gameobject go : gObjects) {
+                cs.sendMsg((String)go.getState("init"));
+            }
             cHandler.init(cs);
         }
         server.clearAdded();
-        server.clearRemoved();
+        server.clearRemoved(cHandler);
         for(ClientServer cs : server.getClientServers().values()) {
             String input = cs.getInput();
-            if(input == null) {
-                
-            } else if(input.equals("quit")) {
-                cHandler.quit(cs);
-            } else {
+            if(input != null) {
                 setFlag(cs.toString() + "-input", input);
             }
             if (cHandler.update(cs)) {
@@ -63,6 +62,19 @@ public class ServerGame extends Game {
     protected void initObject(String spec) {
         super.initObject(spec);
         server.broadcast(spec);
+    }
+    
+    @Override
+    public void removeObject(Gameobject go) {
+        super.removeObject(go);
+        server.broadcast("rm;" + (String)go.getState("id"));
+    }
+    
+    @Override
+    public void removeObject(int id) {
+        super.removeObject(id);
+        System.out.println("rm;" + id);
+        server.broadcast("rm;" + id);
     }
     
     public void updateClients(String update) {

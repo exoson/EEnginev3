@@ -11,7 +11,7 @@ public class SpecifiedTransform extends Transform {
     
     @Override
     public void update(Gameobject go) {
-        Main.getGame().updateClients(Main.getGame().getIdOf(go) + ":pos:" + position.toString());
+        Main.getGame().updateClients(go.getState("id") + ":pos:" + position.toString());
         //System.out.println(position);
     }
 }

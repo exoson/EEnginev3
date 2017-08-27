@@ -54,9 +54,10 @@ public class Client implements Runnable{
                 input = in.readLine();
                 if(input.startsWith("in;")) {
                     Main.getGame().addObject(input);
-                }
-                if(input.startsWith("up;")) {
+                } else if(input.startsWith("up;")) {
                     Main.getGame().updateStates(input);
+                } else if(input.startsWith("rm;")) {
+                    Main.getGame().removeObject(Integer.parseInt(input.substring(3)));
                 }
                 //Game.serverMessage(input);
             } catch (IOException ex) {

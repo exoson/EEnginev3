@@ -34,10 +34,10 @@ public class Main {
                 
             }
         }, new ClientHandler() {
-            int playerId;
             @Override
             public boolean init(ClientServer cs) {
-                playerId = game.addObject("in;pos,10,10,0;Transform;Animator");
+                int playerId = game.addObject("in;pos:10,10,0;Transform;Animator");
+                game.setFlag(cs.toString() + "-player", playerId);
                 return false;
             }
 
@@ -46,7 +46,7 @@ public class Main {
                 String cName = cs.toString();
                 int KEY_0 = 0x30;
                 int KEY_A = 0x41, KEY_S = 0x53, KEY_W = 0x57, KEY_D = 0x44;
-                Gameobject player = Main.getGame().getObject(playerId);
+                Gameobject player = Main.getGame().getObject((int)game.getFlag(cName + "-player"));
                 if(player == null) return false;
                 float speed = 0.01f;
                 if(Main.getGame().getClientKey(cName, KEY_W)) {
@@ -66,6 +66,9 @@ public class Main {
 
             @Override
             public void quit(ClientServer cs) {
+                String cName = cs.toString();
+                System.out.println("Quitting");
+                Main.getGame().removeObject((int)game.getFlag(cName + "-player"));
                 
             }
         });

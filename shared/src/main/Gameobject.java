@@ -1,11 +1,9 @@
 package main;
 
-import behaviors.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import math.Vector3f;
 
 /**
  *
@@ -78,14 +76,21 @@ public class Gameobject {
         
         String[] splitted = str.split(";");
         for(String s : splitted) {
+            if(s.isEmpty()) {
+                continue;
+            }
             if(s.equals("in")) {
                 continue;
             }
-            if(s.startsWith("pos,")) {
+            if(s.startsWith("pos:")) {
                 state.put("pos", s.substring(4));
                 continue;
             }
-            String[] subsplit = s.split(",");
+            if(s.startsWith("id:")) {
+                state.put("id", Integer.parseInt(s.substring(3)));
+                continue;
+            }
+            String[] subsplit = s.split(":");
             try {
                 String className = subsplit[0];
                 Behavior b = (Behavior)Class.forName("behaviors.Specified" + className).newInstance();
@@ -101,6 +106,7 @@ public class Gameobject {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        state.put("init", str);
         return new Gameobject(behaviors, state);
     }
 }
