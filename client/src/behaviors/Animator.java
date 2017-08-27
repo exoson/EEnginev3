@@ -37,7 +37,7 @@ public class Animator implements Behavior {
         TransformRoot tf = (TransformRoot)go.getBehavior("Transform");
         Animation animation = anims.get(curAnim);
         if(animation != null) {
-            animation.render(tf.getPosition());
+            animation.render(tf.getPosition(), tf.getRotation());
         }
     }
     public void addAnimation(Animation anim) {

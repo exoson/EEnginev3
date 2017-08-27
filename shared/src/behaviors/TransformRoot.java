@@ -14,8 +14,8 @@ public abstract class TransformRoot implements Behavior {
     
     @Override
     public void start(Gameobject go) {
-        position = new Vector3f((String)go.getState("pos"));
-        rotation = new Vector3f();
+        position = new Vector3f((String)go.getState("Transformpos"));
+        rotation = new Vector3f((String)go.getState("Transformrot"));
     }
     
     @Override

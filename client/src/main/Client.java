@@ -52,6 +52,7 @@ public class Client implements Runnable{
             String input;
             try {
                 input = in.readLine();
+                //System.out.println(input);
                 if(input.startsWith("in;")) {
                     Main.getGame().addObject(input);
                 } else if(input.startsWith("up;")) {

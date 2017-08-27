@@ -21,7 +21,7 @@ public class Frame
      * @return True if frame has ended.
      */
     public boolean render(Vector3f pos) {
-        return render(pos,0,new Vector2f(getSX(),getSY()),1,1,1,1);
+        return render(pos, new Vector3f(),new Vector2f(getSX(),getSY()),1,1,1,1);
     }
     /**
      * Renders the sprite with specified color and updates age of frame.
@@ -34,8 +34,8 @@ public class Frame
      * @param a the alpha value of the color
      * @return True if frame has ended.
      */
-    public boolean render(Vector3f pos,float rot,Vector2f size,float r, float g, float b, float a) {
-        getSpr().render(pos,rot,size, r, g, b, a);
+    public boolean render(Vector3f pos, Vector3f rot,Vector2f size,float r, float g, float b, float a) {
+        getSpr().render(pos, rot, size, r, g, b, a);
         numDisplayed++;
         
         if(numDisplayed >= length) {

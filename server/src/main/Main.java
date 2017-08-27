@@ -36,7 +36,7 @@ public class Main {
         }, new ClientHandler() {
             @Override
             public boolean init(ClientServer cs) {
-                int playerId = game.addObject("in;pos:10,10,0;Transform;Animator");
+                int playerId = game.addObject("in;Transform:pos:10,10,0:rot:0,0,0;Animator;TankMovement:speed:0.01:rotSpeed:0.00003:client:" + cs.toString());
                 game.setFlag(cs.toString() + "-player", playerId);
                 return false;
             }
@@ -49,7 +49,7 @@ public class Main {
                 Gameobject player = Main.getGame().getObject((int)game.getFlag(cName + "-player"));
                 if(player == null) return false;
                 float speed = 0.01f;
-                if(Main.getGame().getClientKey(cName, KEY_W)) {
+                /*if(Main.getGame().getClientKey(cName, KEY_W)) {
                     ((Transform)player.getBehavior("Transform")).move(new Vector3f(0, -speed, 0));
                 }
                 if(Main.getGame().getClientKey(cName, KEY_A)) {
@@ -60,7 +60,7 @@ public class Main {
                 }
                 if(Main.getGame().getClientKey(cName, KEY_D)) {
                     ((Transform)player.getBehavior("Transform")).move(new Vector3f(speed, 0, 0));
-                }
+                }*/
                 return false;
             }
 

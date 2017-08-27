@@ -71,7 +71,7 @@ public class Sprite
      * @param pos position to render the texture
      */
     public void render(Vector3f pos) {
-        render(pos,0,1,1,1,1);
+        render(pos,new Vector3f(),1,1,1,1);
     }
     /**
      * Renders the sprite
@@ -89,7 +89,7 @@ public class Sprite
      * @param b blue value of the color
      * @param a alpha value of the color
      */
-    public void render(Vector3f pos,float rot, float r, float g, float b, float a) {
+    public void render(Vector3f pos, Vector3f rot, float r, float g, float b, float a) {
         render(pos, rot, new Vector2f(sx, sy), r, g, b, a);
     }
     public static Vector4f curColor = new Vector4f(.5f,.5f,.5f,1);
@@ -103,11 +103,12 @@ public class Sprite
      * @param b blue value of the color
      * @param a alpha value of the color
      */
-    public void render(Vector3f pos,float rot, Vector2f size, float r, float g, float b, float a)
+    public void render(Vector3f pos,Vector3f rot, Vector2f size, float r, float g, float b, float a)
     {
+        System.out.println(rot);
         text.bind();
         shader.enable();
-        shader.setUniformMat4f("ml_matrix", Matrix4f.translate(pos).multiply(Matrix4f.rotateZ(rot)).multiply(Matrix4f.scale(new Vector3f(size.getX()/this.sx,size.getY()/this.sy,1))));
+        shader.setUniformMat4f("ml_matrix", Matrix4f.translate(pos).multiply(Matrix4f.rotateZ(rot.getZ())).multiply(Matrix4f.scale(new Vector3f(size.getX()/this.sx,size.getY()/this.sy,1))));
         shader.setUniform4f("inColor", new Vector4f(1, 1, 1, 1));
 //        shader.setUniform1f("time", DeathMatch.time);
 //        shader.setUniform4f("seed", curColor);

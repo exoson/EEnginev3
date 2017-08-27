@@ -30,6 +30,9 @@ public class Vector3f
         return (float)Math.sqrt(x*x+y*y+z*z);
     }
     
+    public Vector3f add(Vector2f vect) {
+        return new Vector3f(x + vect.getX(),y + vect.getY(), z);
+    }
     public Vector3f add(Vector3f vect) {
         return new Vector3f(x + vect.getX(),y + vect.getY(), z + vect.getZ());
     }

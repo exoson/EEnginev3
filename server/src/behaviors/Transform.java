@@ -1,8 +1,8 @@
 package behaviors;
 
-import main.Behavior;
 import main.Gameobject;
 import main.Main;
+import math.Vector2f;
 import math.Vector3f;
 
 /**
@@ -14,12 +14,17 @@ public class Transform extends TransformRoot {
     
     @Override
     public void update(Gameobject go) {
-        Main.getGame().updateClients(go.getState("id") + ":pos:" + position.toString());
+        Main.getGame().updateClients(go.getState("id") + ":Transformpos:" + position.toString());
+        Main.getGame().updateClients(go.getState("id") + ":Transformrot:" + rotation.toString());
     }
     
     @Override
     public void render(Gameobject go) {
         
+    }
+    
+    public void move(Vector2f vec) {
+        position = position.add(vec);
     }
     
     public void move(Vector3f vec) {
@@ -28,5 +33,9 @@ public class Transform extends TransformRoot {
     
     public void rotate(Vector3f vec) {
         rotation = rotation.add(vec);
+    }
+    
+    public void rotate(float amt) {
+        rotation = rotation.add(new Vector3f(0, 0, amt));
     }
 }

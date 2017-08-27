@@ -162,7 +162,10 @@ public class Matrix4f {
         matrix.elements[2 + 2 * 4] = cos;
 
         return matrix;
-
+    }
+    
+    public static Matrix4f rotate(Vector3f vec) {
+        return rotateX(vec.getX()).rotateY(vec.getY()).rotateZ(vec.getZ());
     }
 
     // Our Matrix multiplication function which

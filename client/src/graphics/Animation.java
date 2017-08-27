@@ -22,7 +22,15 @@ public class Animation
      * @return True if animation has ended.
      */
     public boolean render(Vector3f pos) {
-        return render(pos,0, new Vector2f(getFrames().get(curframe).getSX(), getFrames().get(curframe).getSY()),1,1,1,1);
+        return render(pos, new Vector3f(), new Vector2f(getFrames().get(curframe).getSX(), getFrames().get(curframe).getSY()),1,1,1,1);
+    }
+    /**
+     * Renders current frame and updates animation
+     * @param pos position to render the texture
+     * @return True if animation has ended.
+     */
+    public boolean render(Vector3f pos, Vector3f rot) {
+        return render(pos, rot, new Vector2f(getFrames().get(curframe).getSX(), getFrames().get(curframe).getSY()),1,1,1,1);
     }
     /**
      * Renders current frame and updates animation with the specified color
@@ -35,22 +43,7 @@ public class Animation
      * @param a alpha value of the color
      * @return True if animation has ended.
      */
-    public boolean render(Vector2f pos,float rot, Vector2f size, float r, float g, float b, float a)
-    {
-        return render(new Vector3f(pos),rot,size,r,g,b,a);
-    }
-    /**
-     * Renders current frame and updates animation with the specified color
-     * @param pos position to render the texture
-     * @param rot amount to rotate the texture
-     * @param size size to be rendered in
-     * @param r red value of the color
-     * @param g green value of the color
-     * @param b blue value of the color
-     * @param a alpha value of the color
-     * @return True if animation has ended.
-     */
-    public boolean render(Vector3f pos, float rot, Vector2f size, float r, float g, float b, float a)
+    public boolean render(Vector3f pos, Vector3f rot, Vector2f size, float r, float g, float b, float a)
     {
         Frame temp = getFrames().get(curframe);
         
