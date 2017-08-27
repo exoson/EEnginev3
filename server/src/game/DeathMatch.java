@@ -31,6 +31,7 @@ public class DeathMatch implements GameMode {
             resetDelay.start();
         }
         if(resetDelay.over()) {
+            resetDelay.start();
             return true;
         }
         return false;

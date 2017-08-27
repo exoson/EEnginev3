@@ -19,7 +19,6 @@ public class DeathMatch implements GameMode {
     @Override
     public boolean update() {
         if("1".equals((String)Main.getGame().getFlag("res"))) {
-            System.out.println("Saas");
             Main.getGame().setFlag("res", "0");
             return true;
         }
