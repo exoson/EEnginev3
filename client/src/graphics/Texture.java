@@ -28,7 +28,7 @@ public class Texture {
     private int load(String path) {
         BufferedImage image = null;
         try{
-            image = ImageIO.read(new FileInputStream("res/textures/" + path + ".png"));
+            image = ImageIO.read(new FileInputStream("../res/textures/" + path + ".png"));
         } catch (IOException e) {
         }
 

@@ -47,7 +47,7 @@ public class Shader {
     }
 
     public static void loadAll() {
-        defShader = new Shader("res/shaders/bg.vert", "res/shaders/bg.frag");
+        defShader = new Shader("../res/shaders/bg.vert", "../res/shaders/bg.frag");
     }
 
     public static void loadShader(String vertShader, String fragShader) {
