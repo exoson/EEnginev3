@@ -1,9 +1,6 @@
 package behaviors;
 
 import graphics.Animation;
-import graphics.Frame;
-import graphics.Sprite;
-import java.util.ArrayList;
 import java.util.HashMap;
 import main.Behavior;
 import main.Gameobject;

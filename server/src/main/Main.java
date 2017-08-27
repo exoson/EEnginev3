@@ -33,7 +33,7 @@ public class Main {
         }, new ClientHandler() {
             @Override
             public boolean init(ClientServer cs) {
-                int playerId = game.addObject("in;Transform:pos:10,10,0:rot:0,0,0:size:64,64,0;Animator:anims:tank,default;TankMovement:speed:10.0:rotSpeed:0.05:client:" + cs.toString() + ";CannonBehavior");
+                int playerId = game.addObject("in;client:" + cs.toString() + ";file:tank;Transform:pos:100,100,0;");
                 game.setFlag(cs.toString() + "-player", playerId);
                 return false;
             }
@@ -66,7 +66,6 @@ public class Main {
             @Override
             public void quit(ClientServer cs) {
                 String cName = cs.toString();
-                System.out.println("Quitting");
                 Main.getGame().removeObject((int)game.getFlag(cName + "-player"));
                 
             }

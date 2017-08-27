@@ -25,7 +25,7 @@ public class TankMovement implements Behavior {
     public void start(Gameobject go) {
         this.speed = Float.parseFloat((String)go.getState("TankMovementspeed"));
         this.rotSpeed = Float.parseFloat((String)go.getState("TankMovementrotSpeed"));
-        this.cName = (String)go.getState("TankMovementclient");
+        this.cName = (String)go.getState("client");
         setBackward(Input.KEY_S);
         setForward(Input.KEY_W);
         setRight(Input.KEY_D);

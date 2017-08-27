@@ -79,7 +79,14 @@ public class Gameobject {
         ArrayList<Behavior> behaviors = new ArrayList<>();
         HashMap<String, Object> state = new HashMap<>();
         
-        String[] splitted = str.split(";");
+        parseStateBehv(behaviors, state, str);
+        
+        state.put("init", str);
+        return new Gameobject(behaviors, state);
+    }
+    
+    private static void parseStateBehv(ArrayList<Behavior> behaviors, HashMap<String, Object> state, String spec) {
+        String[] splitted = spec.split(";");
         for(String s : splitted) {
             if(s.isEmpty()) {
                 continue;
@@ -87,19 +94,33 @@ public class Gameobject {
             if(s.equals("in")) {
                 continue;
             }
-            if(s.startsWith("pos:")) {
-                state.put("pos", s.substring(4));
-                continue;
-            }
             if(s.startsWith("id:")) {
                 state.put("id", Integer.parseInt(s.substring(3)));
+                continue;
+            }
+            if(s.startsWith("client:")) {
+                state.put("client", s.substring(7));
+                continue;
+            }
+            if(s.startsWith("file:")) {
+                parseStateBehv(behaviors, state, fromFile(s.substring(5)));
                 continue;
             }
             String[] subsplit = s.split(":");
             try {
                 String className = subsplit[0];
-                Behavior b = (Behavior)Class.forName("behaviors." + className).newInstance();
-                behaviors.add(b);
+                String fullName = "behaviors." + className;
+                boolean duplicate = false;
+                for(Behavior b : behaviors) {
+                    if(b.getClass().equals(Class.forName(fullName))) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if(!duplicate) {
+                    Behavior b = (Behavior)Class.forName(fullName).newInstance();
+                    behaviors.add(b);
+                }
                 for(int i = 1; i < subsplit.length; i+=2) {
                     state.put(className + subsplit[i], subsplit[i+1]);
                 }
@@ -111,20 +132,21 @@ public class Gameobject {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        state.put("init", str);
-        return new Gameobject(behaviors, state);
     }
     
-    public static Gameobject fromFile(String fileName) {
-        String fullDef = null;
+    public static String fromFile(String fileName) {
+        String fullDef = "";
         try {
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
-            String def = br.readLine();
+            BufferedReader br = new BufferedReader(new FileReader("../res/objects/" + fileName + ".obj"));
+            String line;
+            while((line = br.readLine()) != null) {
+                fullDef += line;
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Gameobject.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Gameobject.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return fromString(fullDef);
+        return fullDef;
     }
 }
