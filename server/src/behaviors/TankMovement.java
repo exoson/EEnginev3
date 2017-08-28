@@ -3,7 +3,9 @@ package behaviors;
 import main.Behavior;
 import main.Gameobject;
 import main.Input;
+import main.Main;
 import math.Vector2f;
+import math.Vector3f;
 
 /**
  *
@@ -30,6 +32,7 @@ public class TankMovement implements Behavior {
         setForward(Input.KEY_W);
         setRight(Input.KEY_D);
         setLeft(Input.KEY_A);
+        go.setState("hit", false);
     }
     @Override
     public void render(Gameobject go) {
@@ -37,11 +40,18 @@ public class TankMovement implements Behavior {
     }
     @Override
     public void update(Gameobject go) {
+        move(go);
+        if((boolean)go.getState("hit")) {
+            Main.getGame().removeObject((int)go.getState("id"));
+        }
+    }
+    
+    private void move(Gameobject go) {
         Transform tf = (Transform)go.getBehavior("Transform");
-        Vector2f v = new Vector2f((float)Math.cos(tf.getRotation().getZ()+Math.PI/2),(float)Math.sin(tf.getRotation().getZ()+Math.PI/2)).mult(speed);
+        Vector3f v = tf.forward().mult(speed);
         if(Input.getKey(cName, keys[FORWARD])) {
             tf.move(v.mult(-1));
-        }else if(Input.getKey(cName, keys[BACKWARD])) {
+        } else if(Input.getKey(cName, keys[BACKWARD])) {
             tf.move(v);
         }
         float rot = (Input.getKey(cName, keys[LEFT]) ? -rotSpeed : 0) + (Input.getKey(cName, keys[RIGHT]) ? rotSpeed : 0);

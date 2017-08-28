@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Game implements Runnable {
     
     private final HashMap<String, Object> state;
-    protected GameMode gMode;
+    private GameMode gMode;
     protected final ArrayList<Gameobject> gObjects;
     protected final ArrayList<Gameobject> removedObjects;
     protected final ArrayList<String> addedObjects;
@@ -43,8 +43,8 @@ public class Game implements Runnable {
         }
         removedObjects.removeAll(removedObjects);
         
-        if(gMode.update()) {
-            gMode.reset();
+        if(getgMode().update()) {
+            getgMode().reset();
         }
     }
     
@@ -55,7 +55,7 @@ public class Game implements Runnable {
     @Override
     public void run() {
         Time.init();
-        gMode.start();
+        getgMode().start();
         setFlag("running", true);
         while((boolean)getFlag("running")) {
             Time.update();
@@ -115,5 +115,12 @@ public class Game implements Runnable {
 
     protected void stop() {
         
+    }
+
+    /**
+     * @return the gMode
+     */
+    public GameMode getgMode() {
+        return gMode;
     }
 }

@@ -1,6 +1,7 @@
 
 package game;
 
+import behaviors.Transform;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,6 +24,36 @@ public class Map
     }
     public void update() {
         
+    }
+    
+    public boolean checkCollisionsAll(Transform tf) {
+        for(int y = 0; y < HEIGHT; y++) { 
+            for(int x = 0; x < WIDTH; x++) {
+                if(squares[x][y] == 0) continue;
+                if(checkCollisions(tf, x, y)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkCollisionsAll(Gameobject go) {
+        Transform tf = (Transform)go.getBehavior("Transform");
+        return checkCollisionsAll(tf);
+    }
+    
+    public boolean checkCollisions(Gameobject go, int x, int y) {
+        Transform tf = (Transform)go.getBehavior("Transform");
+        return checkCollisions(tf, x, y);
+    }
+    
+    public boolean checkCollisions(Transform tf, int x, int y) {
+        return Physics.rectRectCollision(tf, new Vector3f[]{
+                        new Vector3f((x-1f/2) * SQRSIZE,(y-1f/2) * SQRSIZE, 0),
+                        new Vector3f((x+1f/2) * SQRSIZE,(y-1f/2) * SQRSIZE, 0),
+                        new Vector3f((x-1f/2) * SQRSIZE,(y+1f/2) * SQRSIZE, 0),
+                        new Vector3f((x+1f/2) * SQRSIZE,(y+1f/2) * SQRSIZE, 0)
+                    });
     }
     
 //    private void checkVisibilitya()
@@ -82,12 +113,7 @@ public class Map
             for(int x = 0; x < WIDTH; x++) {
                 int temp = rng.nextFloat() > 0.9 ? 1 : 0;
                 for(Gameobject go : Main.getGame().getObjects()) {
-                    if(Physics.rectRectCollision(go, new Vector3f[]{
-                        new Vector3f((x-1f/2) * SQRSIZE,(y-1f/2) * SQRSIZE, 0),
-                        new Vector3f((x+1f/2) * SQRSIZE,(y-1f/2) * SQRSIZE, 0),
-                        new Vector3f((x-1f/2) * SQRSIZE,(y+1f/2) * SQRSIZE, 0),
-                        new Vector3f((x+1f/2) * SQRSIZE,(y+1f/2) * SQRSIZE, 0)
-                    })) {
+                    if(checkCollisions(go, x, y)) {
                         temp = 0;
                     }
                     if(x == 0 || x == WIDTH-1 || y == 0 || y == HEIGHT-1) {

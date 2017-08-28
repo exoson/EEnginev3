@@ -2,13 +2,34 @@
 package main;
 
 import behaviors.Transform;
+import java.util.ArrayList;
 import math.Vector2f;
 import math.Vector3f;
 
 public class Physics {
+    /**
+     * Calculates which Gameobjects collide with the specified sphere.
+     * @param tf Transform which collisions we wanna check
+     * @param radius radius of the sphere.
+     * @param gObjects ArrayList of objects we wanna check collisions with
+     * @return ArrayList of Gameobjects collided with.
+     */
+    public static ArrayList<Gameobject> sphereCollide(Transform tf,float radius, ArrayList<Gameobject> gObjects) {
+        ArrayList<Gameobject> res = new ArrayList<>();
+        for(Gameobject go : gObjects) {
+            if(rectCircleCollision(go, tf.getPosition(), radius)) {
+                res.add(go);
+            }
+        }
+        return res;
+    }
     public static boolean rectRectCollision(Gameobject go1, Gameobject go2) {
         Transform t1 = (Transform)go1.getBehavior("Transform");
         Transform t2 = (Transform)go2.getBehavior("Transform");
+        return rectRectCollision(t1, t2);
+    }
+    
+    public static boolean rectRectCollision(Transform t1, Transform t2) {
         Vector2f[] rotationMatrix1 = new Vector2f[] {
             new Vector2f((float)Math.cos(-t1.getRotation().getZ()),
                     (float)Math.sin(-t1.getRotation().getZ())),
@@ -36,6 +57,9 @@ public class Physics {
     }
     public static boolean rectRectCollision(Gameobject go1, Vector3f[] corners2) {
         Transform t1 = (Transform)go1.getBehavior("Transform");
+        return rectRectCollision(t1, corners2);
+    }
+    public static boolean rectRectCollision(Transform t1, Vector3f[] corners2) {
         boolean tooFar = true;
         for (Vector3f corner : corners2) {
             if(Util.dist(t1.getPosition(), corner) < (t1.getSX() + t1.getSY())) {

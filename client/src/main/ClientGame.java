@@ -45,7 +45,7 @@ public class ClientGame extends Game {
         Window.clear();
         camera.enable();
         
-        gMode.render();
+        getgMode().render();
         for(Gameobject go : gObjects) {
             go.render();
         }

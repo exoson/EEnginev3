@@ -55,4 +55,7 @@ public class DeathMatch implements GameMode {
         Main.getGame().updateClients("map:" + map.toString() + ";res:1");
     }
     
+    public Map getMap() {
+        return map;
+    }
 }

@@ -5,7 +5,7 @@ import main.Delay;
 import main.Gameobject;
 import main.Input;
 import main.Main;
-import math.Vector2f;
+import math.Vector3f;
 
 /**
  *
@@ -45,8 +45,7 @@ public class CannonBehavior implements Behavior {
     
     protected String createAmmo(Gameobject go) {
         Transform tf = (Transform)go.getBehavior("Transform");
-        Vector2f v = new Vector2f((float)Math.cos(tf.getRotation().getZ()+Math.PI/2),(float)Math.sin(tf.getRotation().getZ()+Math.PI/2)).mult(-tf.getSY());
-        //int playerId = game.addObject("in;Transform:pos:10,10,0:rot:0,0,0;Animator;TankMovement:speed:10.0:rotSpeed:0.05:client:" + cs.toString());
+        Vector3f v = tf.forward().mult(-tf.getSY());
         String pos = tf.getPosition().add(v).toString();
         String rot = tf.getRotation().toString();
         return "in;file:ammo;Transform:pos:" + pos + ":rot:" + rot;
