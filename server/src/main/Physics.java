@@ -136,7 +136,9 @@ public class Physics {
         return collided;
     }
     public static boolean rectCircleCollision(Gameobject go1, Vector3f v, float radius) {
-        Transform t1 = (Transform)go1.getBehavior("Transform");
+        Transform t1 = go1.getBehavior("Transform");
+        if(t1 == null) return false;
+        
         Vector2f[] rotationMatrix1 = new Vector2f[]{
             new Vector2f((float)Math.cos(-t1.getRotation().getZ()),
                     (float)Math.sin(-t1.getRotation().getZ())),

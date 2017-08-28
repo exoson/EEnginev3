@@ -79,7 +79,7 @@ public class ServerGame extends Game {
     @Override
     public void removeObject(Gameobject go) {
         super.removeObject(go);
-        server.broadcast("rm;" + (String)go.getState("id"));
+        server.broadcast("rm;" + (int)go.getState("id"));
     }
     
     @Override

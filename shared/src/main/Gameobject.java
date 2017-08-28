@@ -58,14 +58,17 @@ public class Gameobject {
     }
     
     /**
+     * @param <T> Type of behavior to return
      * @param name the name of the Behavior to be found.
      * @return the Behavior if found.
      */
-    public Behavior getBehavior(String name) {
+    public <T> T getBehavior(String name) {
         for(Behavior b : behaviors) {
             String[] split = b.getClass().getName().split("\\.");
             if(split[split.length == 0 ? 0 : split.length-1].equals(name)) {
-                return b;
+                try {
+                    return (T)b;
+                } catch (Exception e){ }
             }
         }
         return null;

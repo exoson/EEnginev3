@@ -123,4 +123,10 @@ public class Game implements Runnable {
     public GameMode getgMode() {
         return gMode;
     }
+    
+    public void removeAll() {
+        for(Gameobject go : gObjects) {
+            removeObject(go);
+        }
+    }
 }

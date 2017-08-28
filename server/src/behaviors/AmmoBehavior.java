@@ -6,7 +6,6 @@ import main.Delay;
 import main.Gameobject;
 import main.Main;
 import main.Physics;
-import math.Vector2f;
 import math.Vector3f;
 
 /**
@@ -53,7 +52,10 @@ public class AmmoBehavior implements Behavior {
         ArrayList<Gameobject> gos = new ArrayList<>();
         for(String s : Main.getGame().getClientNames()) {
             int id = (int)Main.getGame().getFlag(s + "-player");
-            gos.add(Main.getGame().getObject(id));
+            Gameobject player = Main.getGame().getObject(id);
+            if(player != null) {
+                gos.add(player);
+            }
         }
         ArrayList<Gameobject> colls = Physics.sphereCollide(tf, tf.getSX()/2, gos);
         for(Gameobject coll : colls) {
