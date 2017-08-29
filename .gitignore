@@ -26,6 +26,5 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-.properties
 nbproject/private/
 /shared/nbproject/private/
