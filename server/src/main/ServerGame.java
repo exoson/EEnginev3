@@ -99,6 +99,8 @@ public class ServerGame extends Game {
     }
     
     public boolean getClientKey(String clientName, int keyCode) {
-        return server.getClientServer(clientName).getKey(keyCode);
+        ClientServer cs = server.getClientServer(clientName);
+        if(cs == null) return false;
+        return cs.getKey(keyCode);
     }
 }
