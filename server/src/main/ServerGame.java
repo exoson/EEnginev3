@@ -99,10 +99,6 @@ public class ServerGame extends Game {
     }
     
     public boolean getClientKey(String clientName, int keyCode) {
-        String keys = (String)getFlag(clientName + "-input");
-        if(keys.length() < keyCode) {
-            return false;
-        }
-        return keys.charAt(keyCode) == '1';
+        return server.getClientServer(clientName).getKey(keyCode);
     }
 }

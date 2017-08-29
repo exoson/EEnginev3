@@ -1,5 +1,6 @@
 package behaviors;
 
+import java.util.Arrays;
 import main.Behavior;
 import main.Gameobject;
 import main.Input;
@@ -44,6 +45,7 @@ public class TankMovement implements Behavior {
         if((boolean)go.getState("hit")) {
             Main.getGame().removeObject((int)go.getState("id"));
         }
+        //System.out.println(Arrays.toString(keys));
     }
     
     private void move(Gameobject go) {

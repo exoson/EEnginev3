@@ -109,4 +109,8 @@ public class Server implements Runnable{
         }
         removedClients.removeAll(removedClients);
     }
+    
+    public ClientServer getClientServer(String cName) {
+        return clients.get(cName);
+    }
 }

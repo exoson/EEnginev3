@@ -128,12 +128,8 @@ public class Input {
             KEY_RIGHT_SUPER   = 0x15B,
             KEY_MENU          = 0x15C,
             KEY_LAST          = KEY_MENU;
-    
+   
     public static boolean getKey(String clientName, int keyCode) {
-        String keys = (String)Main.getGame().getFlag(clientName + "-input");
-        if(keys.length() < keyCode) {
-            return false;
-        }
-        return keys.charAt(keyCode) == '1';
+        return Main.getGame().getClientKey(clientName, keyCode);
     }
 }

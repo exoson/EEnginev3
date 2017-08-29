@@ -40,8 +40,10 @@ public class Client implements Runnable{
     
     public void sendMsg(boolean[] bools) {
         StringBuilder sb = new StringBuilder();
-        for(boolean b : bools) {
-            sb.append(b ? '1' : '0');
+        for(int i = 0; i < bools.length; i++) {
+            if(bools[i]) {
+                sb.append(i).append(",");
+            }
         }
         sendMsg(sb.toString());
     }
