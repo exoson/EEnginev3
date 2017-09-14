@@ -1,11 +1,9 @@
 package behaviors;
 
-import java.util.Arrays;
 import main.Behavior;
 import main.Gameobject;
 import main.Input;
 import main.Main;
-import math.Vector2f;
 import math.Vector3f;
 
 /**

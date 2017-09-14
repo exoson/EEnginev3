@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
@@ -82,7 +81,6 @@ public class ClientServer implements Runnable {
             if(splitClientInput.length == 0) return false;
             if(splitClientInput[0].isEmpty()) return false;
             for(String key : splitClientInput) {
-                System.out.println(key + ":" + keyCode);
                 if(Integer.parseInt(key) == keyCode) {
                     return true;
                 }

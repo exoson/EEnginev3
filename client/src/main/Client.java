@@ -60,6 +60,7 @@ public class Client implements Runnable{
                 } else if(input.startsWith("up;")) {
                     Main.getGame().updateStates(input);
                 } else if(input.startsWith("rm;")) {
+                    System.out.println(input);
                     Main.getGame().removeObject(Integer.parseInt(input.substring(3)));
                 }
                 //Game.serverMessage(input);

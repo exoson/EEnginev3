@@ -11,30 +11,24 @@ import math.Vector3f;
  *
  * @author Lime
  */
-public class CannonBehavior implements Behavior {
+public class CannonBehavior extends CannonBehaviorRoot {
 
     private String cName;
-    private int shootingKey;
-    private Delay reloadDel;
     
     @Override
     public void start(Gameobject go) {
-        this.cName = (String)go.getState("client");
+        super.start(go);
         this.shootingKey = Input.KEY_SPACE;
-        reloadDel = new Delay(1000);
-        reloadDel.end();
+        this.cName = (String)go.getState("client");
     }
 
     @Override
     public void update(Gameobject go) {
         //if(go.getIsDead()) return;
         
-        if(Input.getKey(cName, shootingKey)) {
-            // FIXME implement this in some nicer way
-            if(reloadDel.over()) {
-                Main.getGame().addObject(createAmmo(go));
-                reloadDel.start();
-            }
+        if(Input.getKey(cName, shootingKey) && reloadDel.over()) {
+            Main.getGame().addObject(createAmmo(go));
+            reloadDel.start();
         }
     }
 

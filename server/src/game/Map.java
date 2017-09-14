@@ -20,7 +20,7 @@ public class Map
     private int[][] squares;
     
     public Map() {
-        initRandomMap();
+        initEmpty();
     }
     public void update() {
         
@@ -112,18 +112,29 @@ public class Map
         for(int y = 0; y < HEIGHT; y++) { 
             for(int x = 0; x < WIDTH; x++) {
                 int temp = rng.nextFloat() > 0.9 ? 1 : 0;
+                if(x == 0 || x == WIDTH-1 || y == 0 || y == HEIGHT-1) {
+                    temp = 1;
+                }
                 for(Gameobject go : Main.getGame().getObjects()) {
                     if(checkCollisions(go, x, y)) {
                         temp = 0;
-                    }
-                    if(x == 0 || x == WIDTH-1 || y == 0 || y == HEIGHT-1) {
-                        temp = 1;
                     }
                 }
                 squares[x][y] = temp;
             }
         }
     }
+    
+    public void initEmpty() {
+        squares = new int[WIDTH][HEIGHT];
+        for(int y = 0; y < HEIGHT; y++) { 
+            for(int x = 0; x < WIDTH; x++) {
+                squares[x][y] = 0;
+            }
+        }
+            
+    }
+    
     public void initMap(String mapname)
     {
         try {

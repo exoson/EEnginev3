@@ -62,6 +62,7 @@ public class AmmoBehavior implements Behavior {
             coll.setState("hit", true);
         }
         if(!colls.isEmpty()) {
+            System.out.println(go.getState("id"));
             Main.getGame().removeObject((int)go.getState("id"));
         }
     }

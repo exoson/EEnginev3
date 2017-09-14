@@ -1,6 +1,5 @@
 package game;
 
-import behaviors.Transform;
 import java.util.ArrayList;
 import main.Delay;
 import main.GameMode;
@@ -17,9 +16,11 @@ public class DeathMatch implements GameMode {
     private Map map;
     
     private Delay resetDelay;
+    private boolean uMap;
     
     @Override
     public void start() {
+        uMap = false;
         map = new Map();
         resetDelay = new Delay(3000);
         resetDelay.start();
@@ -27,6 +28,10 @@ public class DeathMatch implements GameMode {
 
     @Override
     public boolean update() {
+        if(uMap) {
+            updateMap();
+            uMap = false;
+        }
         if(Main.getGame().getClientNames().size() < 2) {
             resetDelay.start();
         }
@@ -59,10 +64,14 @@ public class DeathMatch implements GameMode {
         ArrayList<String> clients = Main.getGame().getClientNames();
         Main.getGame().removeAll();
         for(String cName : clients) {
-            Vector3f pos = Vector3f.random().mult(new Vector3f((Map.WIDTH-3)*Map.SQRSIZE, (Map.HEIGHT-3)*Map.SQRSIZE, 0)).add(new Vector3f(1.5f*Map.SQRSIZE,1.5f*Map.SQRSIZE,0));
+            Vector3f pos = Vector3f.random().mult(new Vector3f((Map.WIDTH-3)*Map.SQRSIZE, (Map.HEIGHT-3)*Map.SQRSIZE, 0)).add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
             int playerId = Main.getGame().addObject("in;client:" + cName + ";file:tank;Transform:pos:" + pos.toString());
             Main.getGame().setFlag(cName + "-player", playerId);
         }
+        uMap = true;
+    }
+    
+    private void updateMap() {
         map.initRandomMap();
         Main.getGame().updateClients("map:" + map.toString() + ";res:1");
     }
