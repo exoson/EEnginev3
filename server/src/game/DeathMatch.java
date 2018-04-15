@@ -48,6 +48,14 @@ public class DeathMatch implements GameMode {
                 alivePlayers++;
             }
         }
+        
+        if(Math.random() > 0.999) {
+            Vector3f pos = Vector3f.random()
+                    .mult(new Vector3f((Map.WIDTH-5)*Map.SQRSIZE, (Map.HEIGHT-5)*Map.SQRSIZE, 0))
+                    .add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
+            Main.getGame().addObject("in;file:powerup;Transform:pos:" + pos.toString());
+        }
+        
         if(!resetDelay.active() && alivePlayers < 2) {
             resetDelay.start();
         }
@@ -64,7 +72,9 @@ public class DeathMatch implements GameMode {
         ArrayList<String> clients = Main.getGame().getClientNames();
         Main.getGame().removeAll();
         for(String cName : clients) {
-            Vector3f pos = Vector3f.random().mult(new Vector3f((Map.WIDTH-3)*Map.SQRSIZE, (Map.HEIGHT-3)*Map.SQRSIZE, 0)).add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
+            Vector3f pos = Vector3f.random()
+                    .mult(new Vector3f((Map.WIDTH-5)*Map.SQRSIZE, (Map.HEIGHT-5)*Map.SQRSIZE, 0))
+                    .add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
             int playerId = Main.getGame().addObject("in;client:" + cName + ";file:tank;Transform:pos:" + pos.toString());
             Main.getGame().setFlag(cName + "-player", playerId);
         }

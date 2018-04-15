@@ -30,6 +30,7 @@ public class Texture {
         try{
             image = ImageIO.read(new FileInputStream("../res/textures/" + path + ".png"));
         } catch (IOException e) {
+            System.out.println(e);
         }
 
         return load(image);

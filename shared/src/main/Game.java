@@ -29,7 +29,7 @@ public class Game implements Runnable {
     
     public void update() {
         for(Gameobject go : gObjects) {
-            go.update();
+                go.update();
             if((boolean)go.getState("remove")) {
                 removedObjects.add(go);
             }

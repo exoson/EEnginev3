@@ -60,9 +60,11 @@ public class AmmoBehavior implements Behavior {
         ArrayList<Gameobject> colls = Physics.sphereCollide(tf, tf.getSX()/2, gos);
         for(Gameobject coll : colls) {
             coll.setState("hit", true);
+            Main.getGame().updateClients(coll.getState("id") + ":hit:true");
+            Transform t = coll.getBehavior("Transform");
+            t.setRotation(tf.getRotation());
         }
         if(!colls.isEmpty()) {
-            System.out.println(go.getState("id"));
             Main.getGame().removeObject((int)go.getState("id"));
         }
     }

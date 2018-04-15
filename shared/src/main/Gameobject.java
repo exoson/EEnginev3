@@ -127,6 +127,7 @@ public class Gameobject {
                     state.put(className + subsplit[i], subsplit[i+1]);
                 }
             } catch (ClassNotFoundException ex) {
+                System.err.println(spec);
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InstantiationException ex) {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);

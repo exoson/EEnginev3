@@ -1,6 +1,7 @@
 package behaviors;
 
 import main.Behavior;
+import main.Delay;
 import main.Gameobject;
 import main.Input;
 import main.Main;
@@ -22,6 +23,8 @@ public class TankMovement implements Behavior {
     
     private float speed, rotSpeed;
     
+    private Delay removeDelay;
+    
     @Override
     public void start(Gameobject go) {
         this.speed = Float.parseFloat((String)go.getState("TankMovementspeed"));
@@ -32,6 +35,7 @@ public class TankMovement implements Behavior {
         setRight(Input.KEY_D);
         setLeft(Input.KEY_A);
         go.setState("hit", false);
+        removeDelay = new Delay(1000);
     }
     @Override
     public void render(Gameobject go) {
@@ -39,11 +43,16 @@ public class TankMovement implements Behavior {
     }
     @Override
     public void update(Gameobject go) {
-        move(go);
-        if((boolean)go.getState("hit")) {
+        if((boolean)go.getState("hit") && !removeDelay.active()) {
+            removeDelay.start();
+        }
+        if(removeDelay.over()) {
             Main.getGame().removeObject((int)go.getState("id"));
         }
-        //System.out.println(Arrays.toString(keys));
+        if(removeDelay.active()) {
+            return;
+        }
+        move(go);
     }
     
     private void move(Gameobject go) {
