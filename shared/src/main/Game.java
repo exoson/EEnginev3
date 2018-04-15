@@ -17,7 +17,6 @@ public class Game implements Runnable {
     protected final ArrayList<String> addedObjects;
     protected int objId;
     
-    private final ReentrantReadWriteLock addLock, rmLock;
     
     public Game(GameMode gMode) {
         this.gMode = gMode;
@@ -26,8 +25,6 @@ public class Game implements Runnable {
         addedObjects = new ArrayList<>();
         removedObjects = new ArrayList<>();
         state = new HashMap<>();
-        addLock = new ReentrantReadWriteLock();
-        rmLock = new ReentrantReadWriteLock();
     }
     
     public void update() {
@@ -38,35 +35,12 @@ public class Game implements Runnable {
             }
         }
         
-        addLock.readLock().lock();
-        try {
-            for(String goSpec : addedObjects) {
-                initObject(goSpec);
-            }
-        } finally {
-            addLock.readLock().unlock();
-        }
-        addLock.writeLock().lock();
-        try {
-            addedObjects.removeAll(addedObjects);
-        } finally {
-            addLock.writeLock().unlock();
-        }
+        updateObjects();
         
-        rmLock.readLock().lock();
-        try {
-            for(Gameobject go : removedObjects) {
-                gObjects.remove(go);
-            }
-        } finally {
-            rmLock.readLock().unlock();
+        for(Gameobject go : removedObjects) {
+            gObjects.remove(go);
         }
-        rmLock.writeLock().lock();
-        try {
-            removedObjects.removeAll(removedObjects);
-        } finally {
-            rmLock.writeLock().unlock();
-        }
+        removedObjects.removeAll(removedObjects);
         
         if(getgMode().update()) {
             getgMode().reset();
@@ -90,13 +64,14 @@ public class Game implements Runnable {
         stop();
     }
     
-    public int addObject(String goSpec) {
-        addLock.writeLock().lock();
-        try {
-            addedObjects.add(goSpec);
-        } finally {
-            addLock.writeLock().unlock();
+    private synchronized void updateObjects() {
+        for(String goSpec : addedObjects) {
+            initObject(goSpec);
         }
+        addedObjects.removeAll(addedObjects);
+    }
+    public synchronized int addObject(String goSpec) {
+        addedObjects.add(goSpec);
         return objId++;
     }
     
@@ -114,36 +89,22 @@ public class Game implements Runnable {
     }
     
     protected void initObject(String goSpec) {
-        addLock.writeLock().lock();
-        try {
-            gObjects.add(Gameobject.fromString(goSpec));
-        } finally {
-            addLock.writeLock().unlock();
-        }
+        gObjects.add(Gameobject.fromString(goSpec));
     }
     
     public void removeObject(Gameobject go) {
-        rmLock.writeLock().lock();
-        try {
-            removedObjects.add(go);
-        } finally {
-            rmLock.writeLock().unlock();
-        }
+        removedObjects.add(go);
     }
     
     public void removeObject(int id) {
-        rmLock.writeLock().lock();
-        try {
-            for(Gameobject go : gObjects) {
-                if((int)go.getState("id") == id) {
-                    System.out.println("Destroy:" + id);
-                    removedObjects.add(go);
-                    break;
-                }
+        for(Gameobject go : gObjects) {
+            if((int)go.getState("id") == id) {
+                System.out.println("Destroy:" + id);
+                removedObjects.add(go);
+                break;
             }
-        } finally {
-            rmLock.writeLock().unlock();
         }
+            
     }
     
     public Object getFlag(String flagName) {
