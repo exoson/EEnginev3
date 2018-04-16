@@ -1,6 +1,7 @@
 package behaviors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import main.Behavior;
 import main.Delay;
 import main.Gameobject;
@@ -14,12 +15,12 @@ import math.Vector3f;
  */
 public class AmmoBehavior implements Behavior {
 
-    private float speed;
+    protected int speed;
     private Delay deathDel;
     
     @Override
     public void start(Gameobject go) {
-        this.speed = Float.parseFloat((String)go.getState("AmmoBehaviorspeed"));
+        this.speed = Integer.parseInt((String)go.getState(this.getClass().getSimpleName() + "speed"));
         deathDel = new Delay(5000);
         deathDel.start();
     }

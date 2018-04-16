@@ -24,7 +24,7 @@ public class CannonBehavior implements Behavior {
         this.cName = (String)go.getState("client");
         reloadDel = new Delay(1000);
         reloadDel.end();
-        go.setState("AmmoTemplate", "ammo");
+        go.setState("AmmoTemplate", "rocketAmmo");
     }
 
     @Override

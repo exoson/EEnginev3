@@ -4,6 +4,7 @@ import game.DeathMatch;
 import main.Gameobject;
 import main.Main;
 import math.Vector2f;
+import math.Vector2i;
 import math.Vector3f;
 
 /**
@@ -27,6 +28,10 @@ public class Transform extends TransformRoot {
     
     public void setPosition(Vector3f vec) {
         position = vec;
+    }
+    
+    public boolean move(Vector2i vec) {
+        return move(new Vector3f(vec));
     }
     
     public boolean move(Vector2f vec) {

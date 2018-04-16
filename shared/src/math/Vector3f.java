@@ -18,6 +18,10 @@ public class Vector3f
         this.z = Float.parseFloat(splitted[2]);
     }
     
+    public Vector3f(Vector2i v) {
+        this(v.getX(),v.getY(),0);
+    }
+    
     public Vector3f(Vector2f v) {
         this(v.getX(),v.getY(),0);
     }
@@ -88,5 +92,9 @@ public class Vector3f
     public static Vector3f random() {
         Random rng = new Random();
         return new Vector3f(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
+    }
+
+    public Vector2i as2i() {
+        return new Vector2i((int)x, (int)y);
     }
 }

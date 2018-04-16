@@ -47,4 +47,9 @@ public abstract class TransformRoot implements Behavior {
     public float getSZ() {
         return size.getZ();
     }
+    
+    @Override
+    public String toString() {
+        return position.toString() + " " + rotation.toString() + " " + size.toString();
+    }
 }

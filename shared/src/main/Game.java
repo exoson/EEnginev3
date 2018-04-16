@@ -37,11 +37,6 @@ public class Game implements Runnable {
         
         updateObjects();
         
-        for(Gameobject go : removedObjects) {
-            gObjects.remove(go);
-        }
-        removedObjects.removeAll(removedObjects);
-        
         if(getgMode().update()) {
             getgMode().reset();
         }
@@ -69,6 +64,11 @@ public class Game implements Runnable {
             initObject(goSpec);
         }
         addedObjects.removeAll(addedObjects);
+        
+        for(Gameobject go : removedObjects) {
+            gObjects.remove(go);
+        }
+        removedObjects.removeAll(removedObjects);
     }
     public synchronized int addObject(String goSpec) {
         addedObjects.add(goSpec);
@@ -92,11 +92,11 @@ public class Game implements Runnable {
         gObjects.add(Gameobject.fromString(goSpec));
     }
     
-    public void removeObject(Gameobject go) {
+    public synchronized void removeObject(Gameobject go) {
         removedObjects.add(go);
     }
     
-    public void removeObject(int id) {
+    public synchronized void removeObject(int id) {
         for(Gameobject go : gObjects) {
             if((int)go.getState("id") == id) {
                 System.out.println("Destroy:" + id);
@@ -104,7 +104,6 @@ public class Game implements Runnable {
                 break;
             }
         }
-            
     }
     
     public Object getFlag(String flagName) {
