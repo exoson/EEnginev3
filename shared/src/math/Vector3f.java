@@ -57,6 +57,12 @@ public class Vector3f
     public Vector3f div(float div) {
         return new Vector3f(x / div,y / div,z / div);
     }
+    public Vector3f reminder(float div) {
+        while(x < 0) {x += (float)Math.PI * 2;}
+        while(y < 0) {y += (float)Math.PI * 2;}
+        while(z < 0) {z += (float)Math.PI * 2;}
+        return new Vector3f(x % div, y % div, z % div);
+    }
     public Vector3f normalize() {
         float length = length();
         if(length != 0) {

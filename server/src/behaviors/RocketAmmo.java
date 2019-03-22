@@ -19,12 +19,13 @@ public class RocketAmmo extends AmmoBehavior
 {
     ArrayList<Vector2i> path;
     private Delay trackDel;
+    private float rotSpeed = 0.01f;
+    
     @Override
     public void start(Gameobject go) {
         super.start(go);
         trackDel = new Delay(1000);
         trackDel.start();
-        speed = 5;
     }
     @Override
     protected void move(Gameobject go) {
@@ -32,6 +33,7 @@ public class RocketAmmo extends AmmoBehavior
             super.move(go);
             return;
         }
+        System.out.println("asdf");
         Transform tf = go.getBehavior("Transform");
         Transform targetTf;
         //go.setIsSolid(false);
@@ -40,6 +42,7 @@ public class RocketAmmo extends AmmoBehavior
         for(String s : Main.getGame().getClientNames()) {
             int id = (int)Main.getGame().getFlag(s + "-player");
             Gameobject player = Main.getGame().getObject(id);
+            if(player == null) continue;
             targetTf = player.getBehavior("Transform");
             float dist = Util.dist(targetTf.getPosition(), tf.getPosition());
             if(dist < minDist) {
@@ -48,34 +51,28 @@ public class RocketAmmo extends AmmoBehavior
             }
         }
         
-        if(closest == null) {
-            super.move(go);
-        } else {
+        if(closest != null) {
             targetTf = closest.getBehavior("Transform");
-            System.out.println(targetTf);
+            
             path = Util.findPath(tf.getPosition(), 
                                  targetTf.getPosition(),
                                  ((DeathMatch)Main.getGame().getgMode()).getMap().getSquares());
-            System.out.println(path.size());
+            
             if(path != null) {
-                Vector2i dest;
+                Vector3f dest;
                 if(path.size() > 1) {
-                    dest = path.get(path.size() > 2 ? path.size()-3 : 0).mult(Map.SQRSIZE);
+                    dest = new Vector3f(path.get(path.size() > 2 ? path.size()-3 : 0).mult(Map.SQRSIZE));
                 } else {
-                    dest = targetTf.getPosition().as2i();
+                    dest = targetTf.getPosition();
                 }
-                Vector3f heading = new Vector3f(dest).minus(tf.getPosition());
-                if(heading.length() < speed) {
-                    tf.move(heading);
-                } else {
-                    tf.move(heading.normalize().mult(speed));
-                }
-            } else {
-                super.move(go);
+                Vector3f targetHeading = dest.minus(tf.getPosition()).normalize();
+                float targetRot = (float)Math.acos(-targetHeading.getY());
+                targetRot = (targetHeading.getX() > 0 ? targetRot : 2*(float)Math.PI-targetRot);
+                float dRot = tf.getRotation().getZ() - targetRot;
+                float prior = dRot > 0 ? -1 : 1;
+                tf.rotate((Math.abs(dRot) > Math.PI ? -1 * prior : 1 * prior) * rotSpeed);
             }
         }
-    }
-    @Override
-    public void render(Gameobject go) {
+        super.move(go);
     }
 }

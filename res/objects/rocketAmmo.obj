@@ -1,4 +1,4 @@
 in;
-Transform:pos:0,0,0:rot:0,0,0:size:5,5,0;
+Transform:pos:0,0,0:rot:0,0,0:size:10,10,0;
 Animator:anims:ammo,default;
-RocketAmmo:speed:5;
+RocketAmmo:speed:2:lifetime:25000;

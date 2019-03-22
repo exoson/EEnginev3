@@ -49,10 +49,12 @@ public class Transform extends TransformRoot {
     
     public void rotate(Vector3f vec) {
         rotation = rotation.add(vec);
+        rotation = rotation.reminder(2 * (float)Math.PI);
     }
     
     public void rotate(float amt) {
         rotation = rotation.add(new Vector3f(0, 0, amt));
+        rotation = rotation.reminder(2 * (float)Math.PI);
     }
 
     public void setRotation(Vector3f rotation) {

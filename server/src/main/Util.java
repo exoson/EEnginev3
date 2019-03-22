@@ -78,7 +78,8 @@ public class Util
     public static ArrayList<Vector2i> findPath(Vector2i start, Vector2i goal, int[][] map) {
         start = start.div(Map.SQRSIZE);
         goal = goal.div(Map.SQRSIZE);
-        if(start.getX() < 0 || start.getY() < 0) {
+        if(start.getX() < 0 || start.getY() < 0 || start.getX() >= map.length || start.getY() >= map[0].length ||
+                goal.getX() < 0 || goal.getY() < 0 || goal.getX() >= map.length || goal.getY() >= map[0].length) {
             return null;
         }
         while(map[goal.getX()][goal.getY()] > 0) goal = goal.add(new Vector2i(1,0));

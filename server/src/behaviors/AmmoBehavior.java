@@ -21,7 +21,12 @@ public class AmmoBehavior implements Behavior {
     @Override
     public void start(Gameobject go) {
         this.speed = Integer.parseInt((String)go.getState(this.getClass().getSimpleName() + "speed"));
-        deathDel = new Delay(5000);
+        Object lifetime = go.getState(this.getClass().getSimpleName() + "lifetime");
+        int del = 5000;
+        if(lifetime != null) {
+            del = Integer.parseInt((String)lifetime);
+        }
+        deathDel = new Delay(del);
         deathDel.start();
     }
 

@@ -7,7 +7,7 @@ import graphics.Window;
  *
  * @author Lime
  */
-public class Main {
+public class Main { 
 
     private static ClientGame game;
     
