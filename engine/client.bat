@@ -1,1 +1,1 @@
-java -Djava.library.path="native" -jar client.jar
+java -Djava.library.path=".\native" -jar client.jar
