@@ -1,0 +1,48 @@
+api/mmserver.proto
+
+cmd/mmserver/main.go
+parse input and start the thing
+
+pkg/mmserver/matchmakingserver.go
+implementation for grpc service calls
+
+pkg/mmserver/persistence/database.go
+pkg/mmserver/persistence/player.go
+pkg/mmserver/persistence/match.go
+pkg/mmserver/persistence/server.go
+pkg/mmserver/test/(integration tests)
+
+----api----
+confirmation {
+  bool ok;
+}
+player {
+  uuid id;
+  string nickname;
+  passwordhash;
+  int elo;
+}
+match {
+  uuid id;
+  player p1;
+  player p2;
+  server server;
+}
+server {
+  uuid id;
+  string ip;
+}
+
+service {
+  createplayer(player) confirmation
+  requestmatch(player) match
+  returnresult(match) confirmation
+  createserver(server) confirmation
+}
+
+----database----
+tables: player, match, ?server?
+
+player: (id), nickname, passwordhash, elo
+match: (id), player1_id, player2_id, server_id, result, ended
+server: (id), ip
