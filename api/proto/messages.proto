@@ -1,0 +1,27 @@
+package api;
+syntax = 'proto3';
+option go_package = "github.com/exoson/EEnginev3/api/messages"
+
+message Server {
+  string id = 1;
+  string ip = 2;
+}
+
+message Player {
+  string id = 1;
+  string name = 2;
+  string password = 3;
+  int64 elo = 4;
+}
+
+message MatchResult {
+  string result = 1;
+}
+
+message Match {
+  string id = 1;
+  Server server = 2;
+  MatchResult result = 3;
+  repeated Player players = 4;
+}
+

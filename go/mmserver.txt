@@ -1,4 +1,4 @@
-api/mmserver.proto
+api/proto/v1/mmserver.proto
 
 cmd/mmserver/main.go
 parse input and start the thing
@@ -35,6 +35,7 @@ server {
 
 service {
   createplayer(player) confirmation
+  updateplayer(player) confirmation
   requestmatch(player) match
   returnresult(match) confirmation
   createserver(server) confirmation

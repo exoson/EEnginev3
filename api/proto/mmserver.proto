@@ -1,0 +1,64 @@
+package api;
+syntax = 'proto3';
+option go_package = "github.com/exoson/EEnginev3/api/frontend"
+
+import 'go.api.proto.messages.proto';
+
+message CreateAccountRequest {
+  messages.Player player = 1;
+}
+
+message CreateAccountResponse {
+  string result = 1;
+}
+
+message UpdateAccountRequest {
+  messages.Player player = 1;
+  string new_password = 2;
+}
+
+message UpdateAccountResponse {
+  string result = 1;
+}
+
+message QueueRequest {
+  messages.Player player = 1;
+}
+message QueueResponse {
+  messages.Server server = 1;
+}
+
+message PollForMatchesRequest {
+  string server_secret = 1;
+}
+
+message PollForMatchesResponse {
+  messages.Match match = 1;
+}
+
+message MatchResultRequest {
+  messages.Match match = 1;
+  string server_secret = 2;
+}
+
+message MatchResultResponse {
+  string result = 1;
+}
+
+service MatchMaking {
+
+  // Create a new account. Player object must have name and password set.
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {}
+
+  // Update account password. Player object must have name and password set.
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {}
+
+  // Queue up for a game. Player object must have name and password set.
+  rpc Queue(QueueRequest) returns (QueueResponse) {}
+
+  // Way for gameservers to poll for matches.
+  rpc PollForMatches(stream PollForMatchesRequest) returns (stream PollForMatchesResponse) {}
+
+  // Update match with the final result. Match in the request has to have id and result.
+  rpc MatchResult(MatchResultRequest) returns (MatchResultResponse) {}
+}
