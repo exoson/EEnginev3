@@ -132,4 +132,8 @@ public class Input {
     public static boolean getKey(String clientName, int keyCode) {
         return Main.getGame().getClientKey(clientName, keyCode);
     }
+
+    public static boolean getKey(Gameobject go, int keyCode) {
+        String clientName = (String)go.getState("client");
+    }
 }

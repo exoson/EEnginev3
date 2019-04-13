@@ -11,7 +11,6 @@ import common.game.Vector3f;
  */
 public class CannonBehavior implements Behavior {
 
-    private String cName;
     private Delay reloadDel;
     private int shootingKey;
     private String ammoTemplate;
@@ -19,7 +18,6 @@ public class CannonBehavior implements Behavior {
     @Override
     public void start(Gameobject go) {
         this.shootingKey = Input.KEY_SPACE;
-        this.cName = (String)go.getState("client");
         reloadDel = new Delay(1000);
         reloadDel.end();
         go.setState("AmmoTemplate", "rocketAmmo");
@@ -30,7 +28,7 @@ public class CannonBehavior implements Behavior {
         //if(go.getIsDead()) return;
 
         ammoTemplate = (String)go.getState("AmmoTemplate");
-        if(Input.getKey(cName, shootingKey)) {
+        if(Input.getKey(go, shootingKey)) {
             // @TODO implement this in some nicer way
             if(reloadDel.over()) {
                 Main.getGame().updateClients(go.getState("id") + ":CannonPlay:true");
