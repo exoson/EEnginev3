@@ -24,6 +24,8 @@ type Database interface {
 	UpdateAccount(*api.Player) error
 	AuthenticateAccount(*api.Player) (bool, error)
 	GetServerIp(string) (string, error)
+	CreateMatch(*api.Match, string) (string, error)
+	UpdateMatchResult(*api.MatchResult) error
 
 	Close() error
 }
@@ -61,7 +63,7 @@ func (d *database) AuthenticateAccount(req *api.Player) (bool, error) {
 }
 
 func (d *database) UpdateAccount(req *api.Player) error {
-	_, err := d.db.Exec("UPDATE tb_player SET password_hash = crypt(?, gen_salt('bf', 8) WHERE (name = ?);", req.Password, req.Name)
+	_, err := d.db.Exec("UPDATE tb_player SET password_hash = crypt($1, gen_salt('bf', 8) WHERE (name = $2);", req.Password, req.Name)
 	return err
 }
 
@@ -82,6 +84,34 @@ func (d *database) GetServerIp(serverSecret string) (string, error) {
 		return "", nil
 	}
 	return ip, nil
+}
+
+func (d *database) CreateMatch(req *api.Match, serverSecret string) (string, error) {
+	tx, err := d.db.Begin()
+	if err != nil {
+		return "", err
+	}
+	id := uuid.New().String()
+	_, err = tx.Exec("INSERT INTO tb_match (id, server_id) SELECT $1, tb_server.id FROM tb_server WHERE tb_server.secret = $2;", id, serverSecret)
+	if err != nil {
+		tx.Rollback()
+		return "", err
+	}
+
+	for _, player := range req.Players {
+		_, err := tx.Exec("INSERT INTO tb_matched_player (match_id, player_id, team_id) SELECT $1, tb_player.id, 0 FROM tb_player WHERE tb_player.name = $2;", id, player.Name)
+		if err != nil {
+			tx.Rollback()
+			return "", err
+		}
+	}
+	err = tx.Commit()
+	return id, err
+}
+
+func (d *database) UpdateMatchResult(req *api.MatchResult) error {
+	_, err := d.db.Exec("UPDATE tb_match SET result = $1, end_time = CURRENT_TIMESTAMP WHERE (id = $2);", req.Result, req.MatchId)
+	return err
 }
 
 func (d *database) Close() error {

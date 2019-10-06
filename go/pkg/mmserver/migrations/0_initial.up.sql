@@ -15,13 +15,13 @@ CREATE TABLE tb_server (
     id uuid NOT NULL,
     ip VARCHAR(255) NOT NULL,
     secret VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (secret)
 );
 
 CREATE TABLE tb_match (
     id uuid NOT NULL,
     server_id uuid REFERENCES tb_server(id),
-    match_password VARCHAR(255),
     result VARCHAR(255),
     end_time timestamp,
     PRIMARY KEY (id)

@@ -7,8 +7,6 @@ import (
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/exoson/EEnginev3/go/pkg/mmserver/persistence"
-	"github.com/google/uuid"
-	_ "google.golang.org/grpc"
 )
 
 type mmServer struct {
@@ -87,15 +85,19 @@ func (mm *mmServer) PollForMatch(ctx context.Context, req *api.PollForMatchReque
 			delete(mm.queuedPlayers, player.Name)
 		}
 		mm.queuedLock.Unlock()
-		id := uuid.New()
 		match := &api.Match{
-			Id: id.String(),
 			Server: &api.Server{
 				Ip:            serverIp,
 				MatchPassword: "matsisala",
 			},
 			Players: players,
 		}
+		id, err := mm.db.CreateMatch(match, req.ServerSecret)
+		if err != nil {
+			return nil, err
+		}
+		match.Id = id
+
 		mm.readyLock.Lock()
 		mm.readyMatches = append(mm.readyMatches, match)
 		mm.readyLock.Unlock()
@@ -109,5 +111,10 @@ func (mm *mmServer) PollForMatch(ctx context.Context, req *api.PollForMatchReque
 }
 
 func (mm *mmServer) MatchResult(ctx context.Context, req *api.MatchResultRequest) (*api.MatchResultResponse, error) {
-	return nil, fmt.Errorf("Not implemented")
+	err := mm.db.UpdateMatchResult(req.Result)
+	if err != nil {
+		return nil, err
+	} else {
+		return &api.MatchResultResponse{}, nil
+	}
 }

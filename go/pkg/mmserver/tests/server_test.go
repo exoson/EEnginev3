@@ -25,35 +25,33 @@ func TestMatchMaking(t *testing.T) {
 
 	pollReq := &api.PollForMatchRequest{ServerSecret: "servusala"}
 	pollResp, err := server.PollForMatch(ctx, pollReq)
-	assert.Equal(t, pollResp, &api.PollForMatchResponse{})
 	assert.Nil(t, err)
+	assert.Equal(t, pollResp, &api.PollForMatchResponse{})
 
 	createReq := &api.CreateAccountRequest{Player: player1}
 	createResp, err := server.CreateAccount(ctx, createReq)
-	assert.Equal(t, createResp, &api.CreateAccountResponse{})
 	assert.Nil(t, err)
+	assert.Equal(t, createResp, &api.CreateAccountResponse{})
 	createReq = &api.CreateAccountRequest{Player: player2}
 	createResp, err = server.CreateAccount(ctx, createReq)
-	assert.Equal(t, createResp, &api.CreateAccountResponse{})
 	assert.Nil(t, err)
+	assert.Equal(t, createResp, &api.CreateAccountResponse{})
 
 	queueReq := &api.QueueRequest{Player: player1}
 	queueResp, err := server.Queue(ctx, queueReq)
-	assert.Equal(t, queueResp, &api.QueueResponse{})
 	assert.Nil(t, err)
+	assert.Equal(t, queueResp, &api.QueueResponse{})
 	queueReq = &api.QueueRequest{Player: player2}
 	queueResp, err = server.Queue(ctx, queueReq)
-	assert.Equal(t, queueResp, &api.QueueResponse{})
 	assert.Nil(t, err)
+	assert.Equal(t, queueResp, &api.QueueResponse{})
 
 	pollReq = &api.PollForMatchRequest{ServerSecret: "servusala"}
 	pollResp, err = server.PollForMatch(ctx, pollReq)
 	assert.Nil(t, err)
-	assert.NotNil(t, pollResp.Match)
-	pollResp.Match.Id = ""
 	assert.Equal(t, pollResp, &api.PollForMatchResponse{
 		Match: &api.Match{
-			Id:      "",
+			Id:      pollResp.Match.Id,
 			Server:  serverMsg,
 			Players: []*api.Player{player1, player2},
 		},
@@ -61,11 +59,21 @@ func TestMatchMaking(t *testing.T) {
 
 	queueReq = &api.QueueRequest{Player: player1}
 	queueResp, err = server.Queue(ctx, queueReq)
-	assert.Equal(t, queueResp, &api.QueueResponse{Server: serverMsg})
 	assert.Nil(t, err)
+	assert.Equal(t, queueResp, &api.QueueResponse{Server: serverMsg})
 	queueReq = &api.QueueRequest{Player: player2}
 	queueResp, err = server.Queue(ctx, queueReq)
-	assert.Equal(t, queueResp, &api.QueueResponse{Server: serverMsg})
 	assert.Nil(t, err)
+	assert.Equal(t, queueResp, &api.QueueResponse{Server: serverMsg})
 
+	resultReq := &api.MatchResultRequest{
+		Result: &api.MatchResult{
+			MatchId: pollResp.Match.Id,
+			Result:  "0",
+		},
+		ServerSecret: "servusala",
+	}
+	resultResp, err := server.MatchResult(ctx, resultReq)
+	assert.Nil(t, err)
+	assert.Equal(t, resultResp, &api.MatchResultResponse{})
 }
