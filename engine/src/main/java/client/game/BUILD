@@ -14,7 +14,7 @@ java_library(
 )
 
 java_binary(
-    name  = "client",
+    name = "client",
     srcs = ["Main.java"],
     main_class = "client.game.Main",
     deps = [

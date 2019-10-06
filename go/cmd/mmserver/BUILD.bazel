@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_binary")
+
+go_library(
+    name = "go_default_library",
+    srcs = ["main.go"],
+    importpath = "github.com/exoson/EEnginev3/go/cmd/mmserver",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//api/proto:go_default_library",
+        "//go/pkg/mmserver:go_default_library",
+        "@org_golang_google_grpc//:go_default_library",
+    ],
+)
+
+go_binary(
+    name = "mmserver",
+    embed = [":go_default_library"],
+    visibility = ["//visibility:public"],
+)

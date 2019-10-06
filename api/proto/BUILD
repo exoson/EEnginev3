@@ -10,9 +10,9 @@ proto_library(
 
 go_proto_library(
     name = "mmserver_go_proto",
-    proto = ":mmserver_proto",
     compilers = ["@io_bazel_rules_go//proto:go_grpc"],
     importpath = "github.com/exoson/EEnginev3/api/proto/mmserver",
+    proto = ":mmserver_proto",
 )
 
 go_library(

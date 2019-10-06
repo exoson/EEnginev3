@@ -11,7 +11,7 @@ java_library(
 )
 
 java_binary(
-    name  = "server",
+    name = "server",
     srcs = ["Main.java"],
     main_class = "server.game.Main",
     deps = [

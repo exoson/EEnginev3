@@ -43,10 +43,10 @@ server {
 service {
   createplayer(player) player
   updateplayer(updateplayerrequest) player
-  
+
   requestmatch(player) match
   hostmatch(server) match
-  
+
   uploadresult(matchresult) confirmation
 }
 
