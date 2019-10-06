@@ -21,4 +21,5 @@ java_binary(
         ":game",
         "//engine/src/main/java/client/graphics",
     ],
+    visibility = ["//visibility:public"],
 )

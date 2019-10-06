@@ -23,11 +23,11 @@ public class ClientGame extends Game {
 
     private Client client;
 
-    public ClientGame(GameMode gMode) {
+    public ClientGame(GameMode gMode, String ipAddress) {
         super(gMode, "client");
         camera = new Camera(Matrix4f.identity());
         try {
-            client = new Client();
+            client = new Client(ipAddress);
             Thread cThread = new Thread(client);
             cThread.setDaemon(true);
             cThread.start();

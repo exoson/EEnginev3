@@ -15,8 +15,8 @@ public class Client implements Runnable{
     private final PrintWriter out;
     private boolean running;
 
-    public Client() throws IOException {
-        client = new Socket("localhost",8000);
+    public Client(String ipAddress) throws IOException {
+        client = new Socket(ipAddress, 8000);
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         out = new PrintWriter(client.getOutputStream());
     }

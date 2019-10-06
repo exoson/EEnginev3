@@ -10,6 +10,9 @@ go_library(
         "@com_github_golang_protobuf//proto:go_default_library",
         "@org_golang_google_grpc//:go_default_library",
     ],
+    data = [
+        "//engine/src/main/java/client/game:client",
+    ],
 )
 
 go_binary(

@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"time"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
@@ -39,10 +39,11 @@ func main() {
 		}
 		emptyResp := &api.QueueResponse{}
 		if !proto.Equal(resp, emptyResp) {
-			fmt.Println("Recieved match")
-			fmt.Println(resp)
-
-			// RUN GAME
+			cmd := exec.Command("engine/src/main/java/client/game/client", resp.Server.Ip, resp.Server.MatchPassword)
+			err = cmd.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
 			break
 		} else {
 			time.Sleep(1000 * time.Millisecond)
