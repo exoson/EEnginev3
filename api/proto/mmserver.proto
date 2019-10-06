@@ -28,17 +28,17 @@ message QueueResponse {
   messages.Server server = 1;
 }
 
-message PollForMatchesRequest {
+message PollForMatchRequest {
   string server_secret = 1;
 }
 
-message PollForMatchesResponse {
+message PollForMatchResponse {
   messages.Match match = 1;
 }
 
 message MatchResultRequest {
-  messages.Match match = 1;
-  string server_secret = 2;
+  string server_secret = 1;
+  messages.MatchResult result = 2;
 }
 
 message MatchResultResponse {
@@ -57,8 +57,8 @@ service MatchMaking {
   rpc Queue(QueueRequest) returns (QueueResponse) {}
 
   // Way for gameservers to poll for matches.
-  rpc PollForMatches(stream PollForMatchesRequest) returns (stream PollForMatchesResponse) {}
+  rpc PollForMatch(PollForMatchRequest) returns (PollForMatchResponse) {}
 
-  // Update match with the final result. Match in the request has to have id and result.
+  // Update match with the final result.
   rpc MatchResult(MatchResultRequest) returns (MatchResultResponse) {}
 }

@@ -19,31 +19,39 @@ confirmation {
 player {
   uuid id;
   string nickname;
-  passwordhash;
+  string password;
   int elo;
+}
+updateplayerrequest {
+  player player;
+  string newpassword;
 }
 match {
   uuid id;
-  player p1;
-  player p2;
+  repeated player team1;
+  repeated player team2;
   server server;
 }
+matchresult {
+  uuid matchid;
+  int result;
+}
 server {
-  uuid id;
   string ip;
 }
 
 service {
-  createplayer(player) confirmation
-  updateplayer(player) confirmation
+  createplayer(player) player
+  updateplayer(updateplayerrequest) player
+  
   requestmatch(player) match
-  returnresult(match) confirmation
-  createserver(server) confirmation
+  hostmatch(server) match
+  
+  uploadresult(matchresult) confirmation
 }
 
 ----database----
-tables: player, match, ?server?
+tables: player, match
 
 player: (id), nickname, passwordhash, elo
 match: (id), player1_id, player2_id, server_id, result, ended
-server: (id), ip

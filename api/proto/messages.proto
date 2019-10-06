@@ -3,8 +3,8 @@ syntax = 'proto3';
 option go_package = "github.com/exoson/EEnginev3/api/messages"
 
 message Server {
-  string id = 1;
-  string ip = 2;
+  string ip = 1;
+  string match_password = 2;
 }
 
 message Player {
@@ -15,13 +15,13 @@ message Player {
 }
 
 message MatchResult {
-  string result = 1;
+  string match_id = 1;
+  string result = 2;
 }
 
 message Match {
   string id = 1;
   Server server = 2;
-  MatchResult result = 3;
-  repeated Player players = 4;
+  repeated Player players = 3;
 }
 
