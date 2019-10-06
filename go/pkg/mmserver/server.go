@@ -22,7 +22,7 @@ func NewMMServer() api.MatchMakingServer {
 }
 
 func (mm *mmServer) CreateAccount(ctx context.Context, req *api.CreateAccountRequest) (*api.CreateAccountResponse, error) {
-	err := mm.db.CreateAccount(req)
+	err := mm.db.CreateAccount(req.Player)
 	return &api.CreateAccountResponse{}, err
 }
 

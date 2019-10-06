@@ -70,6 +70,12 @@ go_repository(
     commit = "931b5ae4c24e6810c8c82ab4734904de3df1c3dc",
 )
 
+go_repository(
+    name = "com_github_google_uuid",
+    importpath = "github.com/google/uuid",
+    commit = "c2e93f3ae59f2904160ceaab466009f965df46d6",
+)
+
 git_repository(
     name = "com_google_protobuf",
     commit = "09745575a923640154bcf307fba8aedff47f240a",
