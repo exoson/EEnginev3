@@ -2,15 +2,12 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "go_default_library",
-    srcs = [
-        "database.go",
-        "server.go",
-    ],
+    srcs = ["server.go"],
     importpath = "github.com/exoson/EEnginev3/go/pkg/mmserver",
     visibility = ["//visibility:public"],
     deps = [
         "//api/proto:go_default_library",
-        "@com_github_lib_pq//:go_default_library",
+        "//go/pkg/mmserver/persistence:go_default_library",
         "@org_golang_google_grpc//:go_default_library",
     ],
 )

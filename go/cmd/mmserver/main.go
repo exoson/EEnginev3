@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	MMServer := mmserver.NewMMServer()
 
 	s := grpc.NewServer()
