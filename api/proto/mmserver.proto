@@ -1,11 +1,34 @@
-package api;
 syntax = 'proto3';
-option go_package = "github.com/exoson/EEnginev3/api/frontend"
 
-import 'go.api.proto.messages.proto';
+package mmserver;
+
+option go_package = "github.com/exoson/EEnginev3/api/proto/mmserver";
+
+message Server {
+  string ip = 1;
+  string match_password = 2;
+}
+
+message Player {
+  string id = 1;
+  string name = 2;
+  string password = 3;
+  int64 elo = 4;
+}
+
+message MatchResult {
+  string match_id = 1;
+  string result = 2;
+}
+
+message Match {
+  string id = 1;
+  Server server = 2;
+  repeated Player players = 3;
+}
 
 message CreateAccountRequest {
-  messages.Player player = 1;
+  Player player = 1;
 }
 
 message CreateAccountResponse {
@@ -13,7 +36,7 @@ message CreateAccountResponse {
 }
 
 message UpdateAccountRequest {
-  messages.Player player = 1;
+  Player player = 1;
   string new_password = 2;
 }
 
@@ -22,10 +45,10 @@ message UpdateAccountResponse {
 }
 
 message QueueRequest {
-  messages.Player player = 1;
+  Player player = 1;
 }
 message QueueResponse {
-  messages.Server server = 1;
+  Server server = 1;
 }
 
 message PollForMatchRequest {
@@ -33,12 +56,12 @@ message PollForMatchRequest {
 }
 
 message PollForMatchResponse {
-  messages.Match match = 1;
+  Match match = 1;
 }
 
 message MatchResultRequest {
   string server_secret = 1;
-  messages.MatchResult result = 2;
+  MatchResult result = 2;
 }
 
 message MatchResultResponse {

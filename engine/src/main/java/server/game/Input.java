@@ -1,5 +1,7 @@
 package server.game;
 
+import common.game.Gameobject;
+
 /**
  *
  * @author Lime
@@ -135,5 +137,6 @@ public class Input {
 
     public static boolean getKey(Gameobject go, int keyCode) {
         String clientName = (String)go.getState("client");
+        return getKey(clientName, keyCode);
     }
 }
