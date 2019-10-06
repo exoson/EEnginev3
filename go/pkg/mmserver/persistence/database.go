@@ -23,6 +23,7 @@ type Database interface {
 	CreateAccount(*api.Player) error
 	UpdateAccount(*api.Player) error
 	AuthenticateAccount(*api.Player) (bool, error)
+	GetServerIp(string) (string, error)
 
 	Close() error
 }
@@ -44,50 +45,43 @@ func NewDatabase() (Database, error) {
 }
 
 func (d *database) CreateAccount(req *api.Player) error {
-	tx, err := d.db.Begin()
-	if err != nil {
-		return err
-	}
 	id := uuid.New()
-	_, err = tx.Exec("INSERT INTO tb_player (id, name, password, elo) VALUES ( $1 , $2 , crypt( $3 , gen_salt('bf', 8)), $4 );", id.String(), req.Name, req.Password, DEFAULT_ELO)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-	return tx.Commit()
+	_, err := d.db.Exec("INSERT INTO tb_player (id, name, password, elo) VALUES ( $1 , $2 , crypt( $3 , gen_salt('bf', 8)), $4 );", id.String(), req.Name, req.Password, DEFAULT_ELO)
+	return err
 }
 
 func (d *database) AuthenticateAccount(req *api.Player) (bool, error) {
-	tx, err := d.db.Begin()
+	rows, err := d.db.Query("SELECT * FROM tb_player WHERE (name = $1) AND (password = crypt( $2 , password));", req.Name, req.Password)
 	if err != nil {
-		return false, err
-	}
-	rows, err := tx.Query("SELECT * FROM tb_player WHERE (name = $1) AND (password = crypt( $2 , password));", req.Name, req.Password)
-	if err != nil {
-		tx.Rollback()
 		return false, err
 	}
 	ok := rows.Next()
 	rows.Close()
-	err = tx.Commit()
-	if err != nil {
-		return false, err
-	}
 	return ok, nil
 }
 
 func (d *database) UpdateAccount(req *api.Player) error {
-	tx, err := d.db.Begin()
-	if err != nil {
-		return err
-	}
-	_, err = tx.Exec("UPDATE tb_player SET password_hash = crypt(?, gen_salt('bf', 8) WHERE (name = ?);", req.Password, req.Name)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-	return tx.Commit()
+	_, err := d.db.Exec("UPDATE tb_player SET password_hash = crypt(?, gen_salt('bf', 8) WHERE (name = ?);", req.Password, req.Name)
+	return err
+}
 
+func (d *database) GetServerIp(serverSecret string) (string, error) {
+	rows, err := d.db.Query("SELECT ip FROM tb_server WHERE (secret = $1);", serverSecret)
+	if err != nil {
+		return "", err
+	}
+	ok := rows.Next()
+	var ip string
+	if ok {
+		err = rows.Scan(&ip)
+	} else {
+		err = fmt.Errorf("Failed to find server from table")
+	}
+	rows.Close()
+	if err != nil {
+		return "", nil
+	}
+	return ip, nil
 }
 
 func (d *database) Close() error {

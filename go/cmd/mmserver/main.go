@@ -10,7 +10,10 @@ import (
 )
 
 func main() {
-	MMServer := mmserver.NewMMServer()
+	MMServer, err := mmserver.NewMMServer()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	s := grpc.NewServer()
 	api.RegisterMatchMakingServer(s, MMServer)
