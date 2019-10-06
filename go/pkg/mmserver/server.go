@@ -12,6 +12,7 @@ type mmServer struct {
 }
 
 func NewMMServer() api.MatchMakingServer {
+	NewDatabase()
 	return &mmServer{}
 }
 

@@ -64,6 +64,12 @@ go_repository(
     version = "v0.3.0",
 )
 
+go_repository(
+    name = "com_github_lib_pq",
+    importpath = "github.com/lib/pq",
+    commit = "931b5ae4c24e6810c8c82ab4734904de3df1c3dc",
+)
+
 git_repository(
     name = "com_google_protobuf",
     commit = "09745575a923640154bcf307fba8aedff47f240a",
