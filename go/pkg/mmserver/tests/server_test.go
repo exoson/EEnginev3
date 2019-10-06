@@ -28,14 +28,14 @@ func TestMatchMaking(t *testing.T) {
 	assert.Equal(t, pollResp, &api.PollForMatchResponse{})
 	assert.Nil(t, err)
 
-	/*createReq := &api.CreateAccountRequest{Player: player1}
+	createReq := &api.CreateAccountRequest{Player: player1}
 	createResp, err := server.CreateAccount(ctx, createReq)
 	assert.Equal(t, createResp, &api.CreateAccountResponse{})
 	assert.Nil(t, err)
 	createReq = &api.CreateAccountRequest{Player: player2}
 	createResp, err = server.CreateAccount(ctx, createReq)
 	assert.Equal(t, createResp, &api.CreateAccountResponse{})
-	assert.Nil(t, err)*/
+	assert.Nil(t, err)
 
 	queueReq := &api.QueueRequest{Player: player1}
 	queueResp, err := server.Queue(ctx, queueReq)
