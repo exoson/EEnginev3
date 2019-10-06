@@ -12,7 +12,7 @@ import (
 type mmServer struct {
 	db            persistence.Database
 	queuedPlayers map[string]*api.Player
-	readyMatches  []*api.Match
+	readyMatches  map[string]*api.Match
 	queuedLock    sync.Mutex
 	readyLock     sync.Mutex
 }
@@ -25,7 +25,7 @@ func NewMMServer() (api.MatchMakingServer, error) {
 	return &mmServer{
 		db:            db,
 		queuedPlayers: map[string]*api.Player{},
-		readyMatches:  []*api.Match{},
+		readyMatches:  map[string]*api.Match{},
 	}, nil
 }
 
@@ -47,22 +47,25 @@ func (mm *mmServer) Queue(ctx context.Context, req *api.QueueRequest) (*api.Queu
 	if !ok {
 		return nil, fmt.Errorf("Wrong user or password")
 	}
+	req.Player.Password = ""
 
-	mm.queuedLock.Lock()
-	if _, ok := mm.queuedPlayers[req.Player.Name]; !ok {
-		mm.queuedPlayers[req.Player.Name] = req.Player
-	}
-	mm.queuedLock.Unlock()
 	mm.readyLock.Lock()
-	defer mm.readyLock.Unlock()
 	for _, match := range mm.readyMatches {
 		for _, player := range match.Players {
 			if player.Name == req.Player.Name {
+				mm.readyLock.Unlock()
 				return &api.QueueResponse{
 					Server: match.Server,
 				}, nil
 			}
 		}
+	}
+	mm.readyLock.Unlock()
+
+	mm.queuedLock.Lock()
+	defer mm.queuedLock.Unlock()
+	if _, ok := mm.queuedPlayers[req.Player.Name]; !ok {
+		mm.queuedPlayers[req.Player.Name] = req.Player
 	}
 	return &api.QueueResponse{}, nil
 }
@@ -99,7 +102,7 @@ func (mm *mmServer) PollForMatch(ctx context.Context, req *api.PollForMatchReque
 		match.Id = id
 
 		mm.readyLock.Lock()
-		mm.readyMatches = append(mm.readyMatches, match)
+		mm.readyMatches[match.Id] = match
 		mm.readyLock.Unlock()
 		return &api.PollForMatchResponse{
 			Match: match,
@@ -112,6 +115,9 @@ func (mm *mmServer) PollForMatch(ctx context.Context, req *api.PollForMatchReque
 
 func (mm *mmServer) MatchResult(ctx context.Context, req *api.MatchResultRequest) (*api.MatchResultResponse, error) {
 	err := mm.db.UpdateMatchResult(req.Result)
+	mm.readyLock.Lock()
+	delete(mm.readyMatches, req.Result.MatchId)
+	mm.readyLock.Unlock()
 	if err != nil {
 		return nil, err
 	} else {

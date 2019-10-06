@@ -57,6 +57,9 @@ func TestMatchMaking(t *testing.T) {
 		},
 	})
 
+	player1 = &api.Player{Name: "test1", Password: "test1"}
+	player2 = &api.Player{Name: "test2", Password: "test2"}
+
 	queueReq = &api.QueueRequest{Player: player1}
 	queueResp, err = server.Queue(ctx, queueReq)
 	assert.Nil(t, err)
