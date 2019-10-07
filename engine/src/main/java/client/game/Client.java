@@ -74,6 +74,9 @@ public class Client implements Runnable{
                 } else if(input.startsWith("rm;")) {
                     System.out.println(input);
                     Main.getGame().removeObject(Integer.parseInt(input.substring(3)));
+                } else if (input.equals("quit")) {
+                    running = true;
+                    Main.getGame().setFlag("running", false);
                 }
                 //Game.serverMessage(input);
             } catch (IOException ex) {

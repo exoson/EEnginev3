@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"regexp"
 	"time"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
@@ -38,22 +39,25 @@ func main() {
 			fmt.Println("Recieved match")
 			fmt.Println(resp)
 
-			// RUN GAME
-			cmd := exec.Command("engine/src/main/java/server/game/server", resp.Match.Server.MatchPassword)
-			err = cmd.Run()
+			cmd := exec.Command("java", "-jar", "engine/src/main/java/server/game/server_deploy.jar", resp.Match.Server.MatchPassword)
+			out, err := cmd.Output()
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			winnerRegexp := regexp.MustCompile("winner:[a-zA-Z0-9]*")
+			winner := winnerRegexp.Find(out)
+			fmt.Println(string(winner))
 
 			resultReq := &api.MatchResultRequest{
 				ServerSecret: serverSecret,
 				Result: &api.MatchResult{
 					MatchId: resp.Match.Id,
-					Result:  "0",
+					Result:  string(winner),
 				},
 			}
 			fmt.Println("Uploading results")
-			_, err := mmServerClient.MatchResult(ctx, resultReq)
+			_, err = mmServerClient.MatchResult(ctx, resultReq)
 			if err != nil {
 				log.Fatal(err)
 			}

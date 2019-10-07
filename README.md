@@ -9,4 +9,4 @@ Match making server for EEnginev3
 
 ## Commands for MMserver
 docker run --rm --name pg-docker -e POSTGRES_PASSWORD=<passwd> -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data postgres
-docker run --rm -v $PWD/go/pkg/mmserver/migrations:/migrations --network=host migrate/migrate -path=/migrations/ -database postgres://<user>:<passwd>@localhost:5432/db_mmserver?sslmode=disable up 1
+docker run --rm -v $PWD/go/pkg/mmserver/migrations:/migrations --network=host migrate/migrate -path=/migrations/ -database postgres://postgres:$PGPASSWORD@localhost:5432/db_mmserver?sslmode=disable up 1

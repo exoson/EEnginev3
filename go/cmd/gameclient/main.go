@@ -41,7 +41,7 @@ func main() {
 		emptyResp := &api.QueueResponse{}
 		if !proto.Equal(resp, emptyResp) {
 			secret := fmt.Sprintf("%s:%s", player.Name, resp.Server.MatchPassword)
-			cmd := exec.Command("engine/src/main/java/client/game/client", resp.Server.Ip, secret)
+			cmd := exec.Command("java", "-jar", "engine/src/main/java/client/game/client_deploy.jar", resp.Server.Ip, secret)
 			err = cmd.Run()
 			if err != nil {
 				log.Fatal(err)

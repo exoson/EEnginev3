@@ -49,7 +49,7 @@ public class Server implements Runnable {
         getClientServers().get(client).sendMsg(msg);
     }
 
-    private void stop() {
+    public void stop() {
         running = false;
         for(ClientServer c : getClientServers().values()) {
             c.stop();

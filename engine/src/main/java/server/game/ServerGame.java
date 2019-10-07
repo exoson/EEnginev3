@@ -109,4 +109,10 @@ public class ServerGame extends Game {
         if(cs == null) return false;
         return cs.getKey(keyCode);
     }
+
+    @Override
+    protected void stop() {
+        server.broadcast("quit");
+        server.stop();
+    }
 }

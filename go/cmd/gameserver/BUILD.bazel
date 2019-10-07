@@ -11,7 +11,7 @@ go_library(
         "@org_golang_google_grpc//:go_default_library",
     ],
     data = [
-        "//engine/src/main/java/server/game:server",
+        "//engine/src/main/java/server/game:server_deploy.jar",
     ],
 )
 

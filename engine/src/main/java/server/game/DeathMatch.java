@@ -1,6 +1,7 @@
 package server.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import common.game.Delay;
 import common.game.GameMode;
 import common.game.Gameobject;
@@ -12,10 +13,14 @@ import common.game.Vector3f;
  */
 public class DeathMatch implements GameMode {
 
+    private static final int MAX_POINTS = 1;
+
     private Map map;
 
     private Delay resetDelay;
     private boolean uMap;
+
+    private HashMap<String, Integer> points;
 
     @Override
     public void start() {
@@ -38,6 +43,14 @@ public class DeathMatch implements GameMode {
             resetDelay.terminate();
             return true;
         }
+
+        if(Math.random() > 0.999) {
+            Vector3f pos = Vector3f.random()
+                    .mult(new Vector3f((Map.WIDTH-5)*Map.SQRSIZE, (Map.HEIGHT-5)*Map.SQRSIZE, 0))
+                    .add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
+            Main.getGame().addObject("in;file:powerup;Transform:pos:" + pos.toString());
+        }
+
         ArrayList<String> clients = Main.getGame().getClientNames();
         int alivePlayers = 0;
         for(String cName : clients) {
@@ -47,14 +60,6 @@ public class DeathMatch implements GameMode {
                 alivePlayers++;
             }
         }
-
-        if(Math.random() > 0.999) {
-            Vector3f pos = Vector3f.random()
-                    .mult(new Vector3f((Map.WIDTH-5)*Map.SQRSIZE, (Map.HEIGHT-5)*Map.SQRSIZE, 0))
-                    .add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
-            Main.getGame().addObject("in;file:powerup;Transform:pos:" + pos.toString());
-        }
-
         if(!resetDelay.active() && alivePlayers < 2) {
             resetDelay.start();
         }
@@ -69,6 +74,25 @@ public class DeathMatch implements GameMode {
     @Override
     public void reset() {
         ArrayList<String> clients = Main.getGame().getClientNames();
+        if (points == null) {
+            points = new HashMap<>();
+            for (String cName : clients) {
+                points.put(cName, 0);
+            }
+        } else {
+            for (String cName : clients) {
+                int playerId = (int)Main.getGame().getFlag(cName + "-player");
+                Gameobject player = Main.getGame().getObject(playerId);
+                if (player != null) {
+                    points.put(cName, points.get(cName) + 1);
+                    if ((points.get(cName) >= MAX_POINTS)) {
+                        Main.getGame().setFlag("running", false);
+                        System.out.println("winner:" + cName);
+                        return;
+                    }
+                }
+            }
+        }
         Main.getGame().removeAll();
         for(String cName : clients) {
             Vector3f pos = Vector3f.random()
