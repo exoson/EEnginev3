@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os/exec"
 	"time"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
@@ -38,7 +39,11 @@ func main() {
 			fmt.Println(resp)
 
 			// RUN GAME
-			time.Sleep(10000 * time.Millisecond)
+			cmd := exec.Command("engine/src/main/java/server/game/server", resp.Match.Server.MatchPassword)
+			err = cmd.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
 
 			resultReq := &api.MatchResultRequest{
 				ServerSecret: serverSecret,

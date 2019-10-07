@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.AuthenticationException;
 
 public class ClientServer implements Runnable {
 
@@ -17,12 +18,13 @@ public class ClientServer implements Runnable {
     private final BufferedReader in;
     private final PrintWriter out;
     private boolean running;
+    private final String clientName;
 
     private String clientInput;
     private String[] splitClientInput;
     private final ReadWriteLock inLock;
 
-    public ClientServer(Server s, Socket client) throws IOException {
+    public ClientServer(Server s, Socket client, String expectedSecret) throws IOException, AuthenticationException {
         client.setSoTimeout(0);
         client.setKeepAlive(true);
         clientSocket = client;
@@ -30,6 +32,17 @@ public class ClientServer implements Runnable {
         inLock = new ReentrantReadWriteLock();
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new PrintWriter(clientSocket.getOutputStream());
+        String ret = in.readLine();
+        if (!ret.endsWith(expectedSecret)) {
+            out.println("fail");
+            out.flush();
+            client.close();
+            out.close();
+            in.close();
+            throw new AuthenticationException("Wrong authentication secret");
+        }
+        String[] split = ret.split(":");
+        clientName = split[0];
     }
 
     @Override
@@ -93,6 +106,6 @@ public class ClientServer implements Runnable {
 
     @Override
     public String toString() {
-        return clientSocket.toString();
+        return clientName;
     }
 }

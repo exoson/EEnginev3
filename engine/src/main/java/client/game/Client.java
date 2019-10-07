@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.AuthenticationException;
 
 public class Client implements Runnable{
 
@@ -15,10 +16,21 @@ public class Client implements Runnable{
     private final PrintWriter out;
     private boolean running;
 
-    public Client(String ipAddress) throws IOException {
+    public Client(String[] args) throws IOException, AuthenticationException {
+        String ipAddress = args[0];
+        String secret = args[1];
         client = new Socket(ipAddress, 8000);
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         out = new PrintWriter(client.getOutputStream());
+        out.println(secret);
+        out.flush();
+        String ret = in.readLine();
+        if ("fail".equals(ret)) {
+            client.close();
+            out.close();
+            in.close();
+            throw new AuthenticationException();
+        }
     }
 
     public void stop() {

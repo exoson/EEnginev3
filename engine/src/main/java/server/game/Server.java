@@ -7,13 +7,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.AuthenticationException;
 
-public class Server implements Runnable{
+public class Server implements Runnable {
 
     private HashMap<String, ClientServer> clients = new HashMap<>();
     private ArrayList<ClientServer> newClients = new ArrayList<>();
     private ArrayList<ClientServer> removedClients = new ArrayList<>();
     boolean running;
+    private String expectedSecret;
+
+    public Server(String[] args) {
+        expectedSecret = args[0];
+    }
 
 //    public static void main(String[] args) {
 //        Server s;
@@ -62,9 +68,13 @@ public class Server implements Runnable{
                 }
                 catch(IOException e){ }
                 if(client != null) {
-                    ClientServer clientServer = new ClientServer(this, client);
-                    newClients.add(clientServer);
-                    new Thread(clientServer).start();
+                    try {
+                        ClientServer clientServer = new ClientServer(this, client, expectedSecret);
+                        newClients.add(clientServer);
+                        new Thread(clientServer).start();
+                    } catch(AuthenticationException ae) {
+                        Logger.getLogger(Server.class.getName()).log(Level.INFO, null, ae);
+                    }
                 }
             }
         } catch (IOException ex) {

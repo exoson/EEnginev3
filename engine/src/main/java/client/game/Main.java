@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         init();
-        game = new ClientGame(new DeathMatch(), args[0]);
+        game = new ClientGame(new DeathMatch(), args);
         game.run();
         cleanUp();
     }

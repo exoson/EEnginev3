@@ -3,6 +3,7 @@ package client.game;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.AuthenticationException;
 
 import client.graphics.Camera;
 import client.graphics.Window;
@@ -23,15 +24,17 @@ public class ClientGame extends Game {
 
     private Client client;
 
-    public ClientGame(GameMode gMode, String ipAddress) {
+    public ClientGame(GameMode gMode, String[] args) {
         super(gMode, "client");
         camera = new Camera(Matrix4f.identity());
         try {
-            client = new Client(ipAddress);
+            client = new Client(args);
             Thread cThread = new Thread(client);
             cThread.setDaemon(true);
             cThread.start();
         } catch (IOException ex) {
+            Logger.getLogger(ClientGame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AuthenticationException ex) {
             Logger.getLogger(ClientGame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

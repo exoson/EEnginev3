@@ -9,7 +9,7 @@ public class Main {
     private static ServerGame game;
 
     public static void main(String args[]) {
-        game = new ServerGame(new DeathMatch(), new DeathMatchClientHandler());
+        game = new ServerGame(new DeathMatch(), new DeathMatchClientHandler(), args);
         game.run();
     }
 

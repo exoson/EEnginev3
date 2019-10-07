@@ -20,11 +20,11 @@ public class ServerGame extends Game {
 
     private final Delay tickDelay;
 
-    public ServerGame(GameMode gMode, ClientHandler cHandler) {
+    public ServerGame(GameMode gMode, ClientHandler cHandler, String[] args) {
         super(gMode, "server");
         this.tickDelay = new Delay(1000 / 60);
         this.cHandler = cHandler;
-        server = new Server();
+        server = new Server(args);
         Thread sThread = new Thread(server);
         sThread.setDaemon(true);
         sThread.start();

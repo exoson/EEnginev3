@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -39,7 +40,8 @@ func main() {
 		}
 		emptyResp := &api.QueueResponse{}
 		if !proto.Equal(resp, emptyResp) {
-			cmd := exec.Command("engine/src/main/java/client/game/client", resp.Server.Ip, resp.Server.MatchPassword)
+			secret := fmt.Sprintf("%s:%s", player.Name, resp.Server.MatchPassword)
+			cmd := exec.Command("engine/src/main/java/client/game/client", resp.Server.Ip, secret)
 			err = cmd.Run()
 			if err != nil {
 				log.Fatal(err)
