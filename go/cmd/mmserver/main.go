@@ -18,7 +18,7 @@ func main() {
 	s := grpc.NewServer()
 	api.RegisterMatchMakingServer(s, MMServer)
 
-	sock, err := net.Listen("tcp", ":8080")
+	sock, err := net.Listen("tcp", ":12321")
 	if err != nil {
 		log.Fatal(err)
 	}

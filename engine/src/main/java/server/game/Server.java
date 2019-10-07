@@ -58,7 +58,7 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        try (ServerSocket ss = new ServerSocket(8000)) {
+        try (ServerSocket ss = new ServerSocket(12322)) {
             ss.setSoTimeout(1000);
             running = true;
             while(running){

@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	mmServerAddress := "192.168.0.100:8080"
+	mmServerAddress := "exxxooo.servegame.com:12321"
 	mmServerConnection, err := grpc.Dial(
 		mmServerAddress,
 		grpc.WithInsecure(),

@@ -16,7 +16,7 @@ func TestMatchMaking(t *testing.T) {
 	ctx := context.Background()
 
 	serverMsg := &api.Server{
-		Ip:            "192.168.0.100",
+		Ip:            "exxxooo.servegame.com",
 		MatchPassword: "matsisala",
 	}
 

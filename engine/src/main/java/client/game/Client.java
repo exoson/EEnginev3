@@ -19,7 +19,7 @@ public class Client implements Runnable{
     public Client(String[] args) throws IOException, AuthenticationException {
         String ipAddress = args[0];
         String secret = args[1];
-        client = new Socket(ipAddress, 8000);
+        client = new Socket(ipAddress, 12322);
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         out = new PrintWriter(client.getOutputStream());
         out.println(secret);
