@@ -4,6 +4,7 @@ java_library(
     deps = [
         "//engine/src/main/java/client/graphics",
         "//engine/src/main/java/common/game",
+        "@org_lwjgl_lwjgl//jar",
         "@org_lwjgl_lwjgl_opengl//jar",
         "@org_lwjgl_lwjgl_glfw//jar",
     ],

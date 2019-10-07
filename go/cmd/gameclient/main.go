@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"runtime"
 	"time"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
@@ -40,10 +41,23 @@ func main() {
 		}
 		emptyResp := &api.QueueResponse{}
 		if !proto.Equal(resp, emptyResp) {
+			dir, err := os.Getwd()
+			if err != nil {
+				log.Fatal(err)
+			}
+			origLd := os.Getenv("LD_LIBRARY_PATH")
+			origPath := os.Getenv("PATH")
+			os.Setenv("LD_LIBRARY_PATH", fmt.Sprintf("%s:%s/native", origLd, dir))
+			if runtime.GOOS == "windows" {
+				os.Setenv("PATH", fmt.Sprintf("%s;%s/native", origLd, dir))
+			}
 			secret := fmt.Sprintf("%s:%s", player.Name, resp.Server.MatchPassword)
 			cmd := exec.Command("java", "-jar", "engine/src/main/java/client/game/client_deploy.jar", resp.Server.Ip, secret)
-			err = cmd.Run()
+			out, err := cmd.CombinedOutput()
+			os.Setenv("LD_LIBRARY_PATH", origLd)
+			os.Setenv("PATH", origPath)
 			if err != nil {
+				fmt.Println(string(out))
 				log.Fatal(err)
 			}
 			break
