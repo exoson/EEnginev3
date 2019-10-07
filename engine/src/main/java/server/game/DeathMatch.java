@@ -13,7 +13,7 @@ import common.game.Vector3f;
  */
 public class DeathMatch implements GameMode {
 
-    private static final int MAX_POINTS = 1;
+    private static final int MAX_POINTS = 10;
 
     private Map map;
 

@@ -45,17 +45,14 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			origLd := os.Getenv("LD_LIBRARY_PATH")
-			origPath := os.Getenv("PATH")
-			os.Setenv("LD_LIBRARY_PATH", fmt.Sprintf("%s:%s/native", origLd, dir))
-			if runtime.GOOS == "windows" {
-				os.Setenv("PATH", fmt.Sprintf("%s;%s/native", origLd, dir))
-			}
 			secret := fmt.Sprintf("%s:%s", player.Name, resp.Server.MatchPassword)
-			cmd := exec.Command("java", "-jar", "engine/src/main/java/client/game/client_deploy.jar", resp.Server.Ip, secret)
+			flags := []string{}
+			if runtime.GOOS == "darwin" {
+				flags = append(flags, "-XstartOnFirstThread")
+			}
+			flags = append(flags, fmt.Sprintf("-Djava.library.path=%s/native", dir), "-jar", "engine/src/main/java/client/game/client_deploy.jar", resp.Server.Ip, secret)
+			cmd := exec.Command("java", flags...)
 			out, err := cmd.CombinedOutput()
-			os.Setenv("LD_LIBRARY_PATH", origLd)
-			os.Setenv("PATH", origPath)
 			if err != nil {
 				fmt.Println(string(out))
 				log.Fatal(err)

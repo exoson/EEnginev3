@@ -46,6 +46,7 @@ public class Window {
         // to see what the primary monitor is.
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
+        glfwSwapInterval(1);
         // Sets the initial position of our game window.
         glfwSetWindowPos(getWindow(), 100, 100);
 

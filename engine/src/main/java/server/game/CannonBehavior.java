@@ -20,7 +20,7 @@ public class CannonBehavior implements Behavior {
         this.shootingKey = Input.KEY_SPACE;
         reloadDel = new Delay(1000);
         reloadDel.end();
-        go.setState("AmmoTemplate", "rocketAmmo");
+        go.setState("AmmoTemplate", "ammo");
     }
 
     @Override
