@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"net"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
@@ -18,7 +19,11 @@ func main() {
 	s := grpc.NewServer()
 	api.RegisterMatchMakingServer(s, MMServer)
 
-	sock, err := net.Listen("tcp", ":12321")
+	port := ":12321"
+	if len(os.Args) > 1 {
+		port = os.Args[1]
+	}
+	sock, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatal(err)
 	}

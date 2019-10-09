@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
+	"os"
 	"regexp"
 	"time"
 
@@ -15,6 +16,9 @@ import (
 
 func main() {
 	mmServerAddress := "exxxooo.servegame.com:12321"
+	if len(os.Args) > 1 {
+		mmServerAddress = os.Args[1]
+	}
 	serverSecret := "servusala"
 	mmServerConnection, err := grpc.Dial(
 		mmServerAddress,

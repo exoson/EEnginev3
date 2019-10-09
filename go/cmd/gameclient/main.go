@@ -16,6 +16,9 @@ import (
 
 func main() {
 	mmServerAddress := "exxxooo.servegame.com:12321"
+	if len(os.Args) > 3 {
+		mmServerAddress = os.Args[3]
+	}
 	mmServerConnection, err := grpc.Dial(
 		mmServerAddress,
 		grpc.WithInsecure(),
