@@ -12,6 +12,11 @@ import (
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+)
+
+var (
+	crt = "server.crt"
 )
 
 func main() {
@@ -20,9 +25,15 @@ func main() {
 		mmServerAddress = os.Args[1]
 	}
 	serverSecret := "servusala"
+
+	creds, err := credentials.NewClientTLSFromFile(crt, "")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	mmServerConnection, err := grpc.Dial(
 		mmServerAddress,
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(creds),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -44,8 +55,9 @@ func main() {
 			fmt.Println(resp)
 
 			cmd := exec.Command("java", "-jar", "engine/src/main/java/server/game/server_deploy.jar", resp.Match.Server.MatchPassword)
-			out, err := cmd.Output()
+			out, err := cmd.CombinedOutput()
 			if err != nil {
+				fmt.Println(string(out))
 				log.Fatal(err)
 			}
 

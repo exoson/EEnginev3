@@ -8,6 +8,12 @@ import (
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/exoson/EEnginev3/go/pkg/mmserver"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+)
+
+var (
+	crt = "server.crt"
+	key = "server.key"
 )
 
 func main() {
@@ -16,7 +22,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s := grpc.NewServer()
+	creds, err := credentials.NewServerTLSFromFile(crt, key)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s := grpc.NewServer(grpc.Creds(creds))
 	api.RegisterMatchMakingServer(s, MMServer)
 
 	port := ":12321"

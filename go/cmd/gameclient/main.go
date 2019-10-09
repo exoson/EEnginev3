@@ -12,6 +12,11 @@ import (
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+)
+
+var (
+	crt = "server.crt"
 )
 
 func main() {
@@ -19,13 +24,20 @@ func main() {
 	if len(os.Args) > 3 {
 		mmServerAddress = os.Args[3]
 	}
+
+	creds, err := credentials.NewClientTLSFromFile(crt, "")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	mmServerConnection, err := grpc.Dial(
 		mmServerAddress,
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(creds),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	mmServerClient := api.NewMatchMakingClient(mmServerConnection)
 
 	player := &api.Player{
