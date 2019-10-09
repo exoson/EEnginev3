@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"log"
@@ -8,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"time"
+	"strings"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/golang/protobuf/proto"
@@ -20,6 +22,16 @@ var (
 )
 
 func main() {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print("keystore password: ")
+	ksPassword, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatal(err)
+	}
+	ksPassword = strings.Replace(ksPassword, "\n", "", -1)
+	fmt.Println(ksPassword)
+	ksFlag := fmt.Sprintf("-Djavax.net.ssl.keyStorePassword=%s", ksPassword)
+
 	mmServerAddress := "exxxooo.servegame.com:12321"
 	if len(os.Args) > 1 {
 		mmServerAddress = os.Args[1]
@@ -54,7 +66,7 @@ func main() {
 			fmt.Println("Recieved match")
 			fmt.Println(resp)
 
-			cmd := exec.Command("java", "-jar", "engine/src/main/java/server/game/server_deploy.jar", resp.Match.Server.MatchPassword)
+			cmd := exec.Command("java", ksFlag, "-jar", "engine/src/main/java/server/game/server_deploy.jar", resp.Match.Server.MatchPassword)
 			out, err := cmd.CombinedOutput()
 			if err != nil {
 				fmt.Println(string(out))

@@ -1,13 +1,19 @@
 package server.game;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 
 public class Server implements Runnable {
 
@@ -58,16 +64,22 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
-        try (ServerSocket ss = new ServerSocket(12322)) {
+        try {
+            System.setProperty("javax.net.ssl.keyStoreType", "jks");
+            Path keyStorePath = Paths.get(System.getProperty("user.dir"), "serverKeyStore.key");
+            System.setProperty("javax.net.ssl.keyStore", keyStorePath.toString());
+            SSLServerSocketFactory ssocketFactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
+            SSLServerSocket ss = (SSLServerSocket) ssocketFactory.createServerSocket(12322);
             ss.setSoTimeout(1000);
             running = true;
             while(running){
-                Socket client = null;
+                SSLSocket client = null;
                 try {
-                    client = ss.accept();
+                    client = (SSLSocket) ss.accept();
+                    client.startHandshake();
                 }
                 catch(IOException e){ }
-                if(client != null) {
+                if(client != null && !client.isClosed()) {
                     try {
                         ClientServer clientServer = new ClientServer(this, client, expectedSecret);
                         newClients.add(clientServer);
@@ -79,6 +91,7 @@ public class Server implements Runnable {
             }
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(1);
         }
     }
 

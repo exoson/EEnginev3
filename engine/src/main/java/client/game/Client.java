@@ -4,14 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.AuthenticationException;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class Client implements Runnable{
 
-    private final Socket client;
+    private final SSLSocket client;
     private final BufferedReader in;
     private final PrintWriter out;
     private boolean running;
@@ -19,7 +23,12 @@ public class Client implements Runnable{
     public Client(String[] args) throws IOException, AuthenticationException {
         String ipAddress = args[0];
         String secret = args[1];
-        client = new Socket(ipAddress, 12322);
+        System.setProperty("javax.net.ssl.trustStoreType", "jks");
+        Path keyStorePath = Paths.get(System.getProperty("user.dir"), "clientTrustStore.key");
+        System.setProperty("javax.net.ssl.trustStore", keyStorePath.toString());
+        SSLSocketFactory socketFactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        client = (SSLSocket)socketFactory.createSocket(ipAddress, 12322);
+        client.startHandshake();
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         out = new PrintWriter(client.getOutputStream());
         out.println(secret);

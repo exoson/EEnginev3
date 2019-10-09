@@ -18,5 +18,8 @@ java_binary(
         ":game",
         "//engine/src/main/java/client/graphics",
     ],
+    data = [
+        "//:keystore",
+    ],
     visibility = ["//visibility:public"],
 )

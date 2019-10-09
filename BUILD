@@ -6,5 +6,11 @@ gazelle(name = "gazelle")
 filegroup(
     name = "cert",
     srcs = ["server.crt"],
-    visibility = ["//visibility:public"]
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "keystore",
+    srcs = [],
+    visibility = ["//visibility:public"],
 )

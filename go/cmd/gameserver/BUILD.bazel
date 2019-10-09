@@ -6,6 +6,7 @@ go_library(
     data = [
         "//engine/src/main/java/server/game:server_deploy.jar",
         "//:cert",
+        "//:keystore",
     ],
     importpath = "github.com/exoson/EEnginev3/go/cmd/gameserver",
     visibility = ["//visibility:private"],
