@@ -30,12 +30,26 @@ func NewMMServer() (api.MatchMakingServer, error) {
 }
 
 func (mm *mmServer) CreateAccount(ctx context.Context, req *api.CreateAccountRequest) (*api.CreateAccountResponse, error) {
+	if req.Player == nil {
+		return nil, fmt.Errorf("Invalid account information")
+	}
 	err := mm.db.CreateAccount(req.Player)
 	return &api.CreateAccountResponse{}, err
 }
 
 func (mm *mmServer) UpdateAccount(ctx context.Context, req *api.UpdateAccountRequest) (*api.UpdateAccountResponse, error) {
-	err := mm.db.UpdateAccount(req.Player)
+	if req.Player == nil {
+		return nil, fmt.Errorf("Invalid account information")
+	}
+	ok, err := mm.db.AuthenticateAccount(req.Player)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, fmt.Errorf("Wrong user or password")
+	}
+	req.Player.Password = req.NewPassword
+	err = mm.db.UpdateAccount(req.Player)
 	return &api.UpdateAccountResponse{}, err
 }
 

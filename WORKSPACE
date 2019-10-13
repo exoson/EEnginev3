@@ -57,3 +57,7 @@ git_repository(
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
 protobuf_deps()
+
+load("@com_github_googleapis_googleapis//:repository_rules.bzl", "switched_rules_by_language")
+
+switched_rules_by_language("com_google_googleapis_imports", go = True, grpc = True)

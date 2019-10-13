@@ -63,7 +63,7 @@ func (d *database) AuthenticateAccount(req *api.Player) (bool, error) {
 }
 
 func (d *database) UpdateAccount(req *api.Player) error {
-	_, err := d.db.Exec("UPDATE tb_player SET password_hash = crypt($1, gen_salt('bf', 8) WHERE (name = $2);", req.Password, req.Name)
+	_, err := d.db.Exec("UPDATE tb_player SET password = crypt($1, gen_salt('bf', 8)) WHERE (name = $2);", req.Password, req.Name)
 	return err
 }
 

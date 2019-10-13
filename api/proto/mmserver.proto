@@ -3,6 +3,7 @@ syntax = 'proto3';
 package mmserver;
 
 option go_package = "github.com/exoson/EEnginev3/api/proto/mmserver";
+import "google/api/annotations.proto";
 
 message Server {
   string ip = 1;
@@ -71,10 +72,20 @@ message MatchResultResponse {
 service MatchMaking {
 
   // Create a new account. Player object must have name and password set.
-  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {}
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse) {
+    option (google.api.http) = {
+      post: "/v1/account"
+      body: "*"
+    };
+  }
 
   // Update account password. Player object must have name and password set.
-  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {}
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse) {
+    option (google.api.http) = {
+      put: "/v1/account"
+      body: "*"
+    };
+  }
 
   // Queue up for a game. Player object must have name and password set.
   rpc Queue(QueueRequest) returns (QueueResponse) {}
