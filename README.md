@@ -1,4 +1,4 @@
-[![Build Status](http://exxxooo.servegame.com:8080/buildStatus/icon?job=GithubHook)](http://exxxooo.servegame.com:8080/job/GithubHook/)
+[![Build Status](https://exxxooo.servegame.com:8443/buildStatus/icon?job=GithubHook)](https://exxxooo.servegame.com:8443/job/GithubHook/)
 
 # EEnginev3
 This is the third iteration of game engine 'EEngine'
