@@ -1,55 +1,49 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import { Leaderboard } from './leaderboard.js';
+import { Register } from './register.js';
 
-export default function Login(props) {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
 
-  function validateForm() {
-    return name.length > 0 && password.length > 0;
+class Root extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {view: 0};
+    this.setRegister = this.setRegister.bind(this);
+    this.setLeader = this.setLeader.bind(this);
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const axios = require('axios');
-    axios.post("/v1/account", {
-      player: {name: name, password: password},
-    }).then(function (response) {
-      console.log(response);
-    }).catch(function (error) {
-      console.log(error);
-    })
+  setRegister() {
+    this.setState({
+      view: 1
+    });
   }
 
-  return (
-    <div className="Login">
-      <form onSubmit={handleSubmit}>
-        <FormGroup controlId="name" bsSize="large">
-          <FormLabel>Email</FormLabel>
-          <FormControl
-            autoFocus
-            type="name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
-          <FormLabel>Password</FormLabel>
-          <FormControl
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          type="password"
-          />
-        </FormGroup>
-        <Button block bsSize="large" disabled={!validateForm()} type="submit">
-          Login
-        </Button>
-      </form>
-    </div>
-  );
+  setLeader() {
+    this.setState({
+      view: 2
+    });
+  }
+
+  render() {
+    return (
+      <>
+      <div className="row">
+        <div className="column" onClick={this.setRegister}>
+          REGISTER
+        </div>
+        <div className="column" onClick={this.setLeader}>
+          LEADERBOARD
+        </div>
+      </div>
+      {this.state.view === 1 && <Register />}
+      {this.state.view === 2 && <Leaderboard />}
+      </>
+    )
+  }
 }
 
-ReactDOM.render(<Login />, document.getElementById("root"));
+
+ReactDOM.render(<Root />, document.getElementById("root"));
 
