@@ -111,6 +111,8 @@ public class DeathMatch implements GameMode {
         Main.getGame().removeAll();
         int curTank = 0;
         for(String cName : clients) {
+            Main.getGame().updateClients("player" + curTank + ":" + cName);
+            Main.getGame().updateClients("player" + curTank + "points:" + points.get(cName));
             Vector3f pos = Vector3f.random()
                     .mult(new Vector3f((Map.WIDTH-5)*Map.SQRSIZE, (Map.HEIGHT-5)*Map.SQRSIZE, 0))
                     .add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
