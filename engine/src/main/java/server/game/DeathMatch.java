@@ -109,11 +109,13 @@ public class DeathMatch implements GameMode {
             }
         }
         Main.getGame().removeAll();
+        int curTank = 0;
         for(String cName : clients) {
             Vector3f pos = Vector3f.random()
                     .mult(new Vector3f((Map.WIDTH-5)*Map.SQRSIZE, (Map.HEIGHT-5)*Map.SQRSIZE, 0))
                     .add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
-            int playerId = Main.getGame().addObject("in;client:" + cName + ";file:tank;Transform:pos:" + pos.toString());
+            int playerId = Main.getGame().addObject("in;client:" + cName + ";file:tank;Transform:pos:" + pos.toString() + (curTank==0 ? "" : ";Animator:anims:tankblue,default,tankHit,tankHit;"));
+            curTank++;
             Main.getGame().setFlag(cName + "-player", playerId);
         }
         uMap = true;
