@@ -18,6 +18,7 @@ public class DeathMatch implements GameMode {
     private Map map;
 
     private Delay resetDelay;
+    private Delay quitDelay;
     private boolean uMap;
 
     private HashMap<String, Integer> points;
@@ -28,6 +29,8 @@ public class DeathMatch implements GameMode {
         map = new Map();
         resetDelay = new Delay(3000);
         resetDelay.start();
+        quitDelay = new Delay(30000);
+        quitDelay.start();
     }
 
     @Override
@@ -38,10 +41,22 @@ public class DeathMatch implements GameMode {
         }
         if(Main.getGame().getClientNames().size() < 2) {
             resetDelay.start();
+            if(!quitDelay.active()) {
+                quitDelay.start();
+            }
         }
         if(resetDelay.over()) {
             resetDelay.terminate();
+            quitDelay.terminate();
             return true;
+        }
+        if(quitDelay.over()) {
+            Main.getGame().setFlag("running", false);
+            ArrayList<String> clients = Main.getGame().getClientNames();
+            for(String cName : clients) {
+                System.out.println("connected:" + cName);
+            }
+            return false;
         }
 
         if(Math.random() > 0.999) {

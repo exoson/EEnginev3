@@ -72,15 +72,24 @@ func main() {
 				log.Fatal(err)
 			}
 
+			var result string
+
 			winnerRegexp := regexp.MustCompile("winner:[a-zA-Z0-9]*")
-			winner := winnerRegexp.Find(out)
-			fmt.Println(string(winner))
+			winner := winnerRegexp.FindString(string(out))
+			if len(winner) > 0 {
+				fmt.Println(winner)
+				result = winner
+			} else {
+				connectedRegexp := regexp.MustCompile("connected:[a-zA-Z0-9]*")
+				connected := connectedRegexp.FindAllString(string(out), -1)
+				result = strings.Join(connected, ";")
+			}
 
 			resultReq := &api.MatchResultRequest{
 				ServerSecret: serverSecret,
 				Result: &api.MatchResult{
 					MatchId: resp.Match.Id,
-					Result:  string(winner),
+					Result:  result,
 				},
 			}
 			fmt.Println("Uploading results")
