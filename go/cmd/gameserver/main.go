@@ -5,11 +5,11 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os/exec"
 	"os"
+	"os/exec"
 	"regexp"
-	"time"
 	"strings"
+	"time"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/golang/protobuf/proto"
@@ -29,7 +29,6 @@ func main() {
 		log.Fatal(err)
 	}
 	ksPassword = strings.Replace(ksPassword, "\n", "", -1)
-	fmt.Println(ksPassword)
 	ksFlag := fmt.Sprintf("-Djavax.net.ssl.keyStorePassword=%s", ksPassword)
 
 	mmServerAddress := "exxxooo.servegame.com:12321"

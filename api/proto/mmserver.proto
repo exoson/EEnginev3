@@ -69,6 +69,14 @@ message MatchResultResponse {
   string result = 1;
 }
 
+message ListPlayersRequest {
+
+}
+
+message ListPlayersResponse {
+  repeated Player players = 1;
+}
+
 service MatchMaking {
 
   // Create a new account. Player object must have name and password set.
@@ -95,4 +103,11 @@ service MatchMaking {
 
   // Update match with the final result.
   rpc MatchResult(MatchResultRequest) returns (MatchResultResponse) {}
+
+  // List top players sorted by elo
+  rpc ListPlayers(ListPlayersRequest) returns (ListPlayersResponse) {
+    option (google.api.http) = {
+      get: "/v1/account"
+    };
+  }
 }

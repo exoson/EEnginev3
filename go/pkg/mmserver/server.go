@@ -4,14 +4,20 @@ import (
 	"context"
 	"fmt"
 	"sync"
+	"time"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/exoson/EEnginev3/go/pkg/mmserver/persistence"
 )
 
+type queuedPlayer struct {
+	Player   *api.Player
+	LastBeat time.Time
+}
+
 type mmServer struct {
 	db            persistence.Database
-	queuedPlayers map[string]*api.Player
+	queuedPlayers map[string]*queuedPlayer
 	readyMatches  map[string]*api.Match
 	queuedLock    sync.Mutex
 	readyLock     sync.Mutex
@@ -24,7 +30,7 @@ func NewMMServer() (api.MatchMakingServer, error) {
 	}
 	return &mmServer{
 		db:            db,
-		queuedPlayers: map[string]*api.Player{},
+		queuedPlayers: map[string]*queuedPlayer{},
 		readyMatches:  map[string]*api.Match{},
 	}, nil
 }
@@ -78,8 +84,13 @@ func (mm *mmServer) Queue(ctx context.Context, req *api.QueueRequest) (*api.Queu
 
 	mm.queuedLock.Lock()
 	defer mm.queuedLock.Unlock()
-	if _, ok := mm.queuedPlayers[req.Player.Name]; !ok {
-		mm.queuedPlayers[req.Player.Name] = req.Player
+	if player, ok := mm.queuedPlayers[req.Player.Name]; !ok {
+		mm.queuedPlayers[req.Player.Name] = &queuedPlayer{
+			Player:   req.Player,
+			LastBeat: time.Now(),
+		}
+	} else {
+		player.LastBeat = time.Now()
 	}
 	return &api.QueueResponse{}, nil
 }
@@ -89,11 +100,23 @@ func (mm *mmServer) PollForMatch(ctx context.Context, req *api.PollForMatchReque
 	if err != nil {
 		return nil, err
 	}
+
 	mm.queuedLock.Lock()
+
+	timeouts := []*api.Player{}
+	for _, player := range mm.queuedPlayers {
+		if time.Since(player.LastBeat) > 2*time.Second {
+			timeouts = append(timeouts, player.Player)
+		}
+	}
+	for _, player := range timeouts {
+		delete(mm.queuedPlayers, player.Name)
+	}
+
 	if len(mm.queuedPlayers) >= 2 {
 		players := []*api.Player{}
 		for _, player := range mm.queuedPlayers {
-			players = append(players, player)
+			players = append(players, player.Player)
 			if len(players) == 2 {
 				break
 			}
@@ -137,4 +160,9 @@ func (mm *mmServer) MatchResult(ctx context.Context, req *api.MatchResultRequest
 	} else {
 		return &api.MatchResultResponse{}, nil
 	}
+}
+
+func (mm *mmServer) ListPlayers(ctx context.Context, req *api.ListPlayersRequest) (*api.ListPlayersResponse, error) {
+	players, err := mm.db.ListPlayers()
+	return &api.ListPlayersResponse{Players: players}, err
 }

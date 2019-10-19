@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"os"
 	"net"
+	"os"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/exoson/EEnginev3/go/pkg/mmserver"

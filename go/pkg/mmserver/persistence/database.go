@@ -26,6 +26,7 @@ type Database interface {
 	GetServerIp(string) (string, error)
 	CreateMatch(*api.Match, string) (string, error)
 	UpdateMatchResult(*api.MatchResult) error
+	ListPlayers() ([]*api.Player, error)
 
 	Close() error
 }
@@ -81,7 +82,7 @@ func (d *database) GetServerIp(serverSecret string) (string, error) {
 	}
 	rows.Close()
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	return ip, nil
 }
@@ -112,6 +113,26 @@ func (d *database) CreateMatch(req *api.Match, serverSecret string) (string, err
 func (d *database) UpdateMatchResult(req *api.MatchResult) error {
 	_, err := d.db.Exec("UPDATE tb_match SET result = $1, end_time = CURRENT_TIMESTAMP WHERE (id = $2);", req.Result, req.MatchId)
 	return err
+}
+
+func (d *database) ListPlayers() ([]*api.Player, error) {
+	rows, err := d.db.Query("SELECT name, elo FROM tb_player ORDER BY elo DESC LIMIT 50;")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	players := []*api.Player{}
+	for rows.Next() {
+		var name string
+		var elo int64
+		err = rows.Scan(&name, &elo)
+		if err != nil {
+			return nil, err
+		}
+		players = append(players, &api.Player{Name: name, Elo: elo})
+	}
+	return players, nil
 }
 
 func (d *database) Close() error {
