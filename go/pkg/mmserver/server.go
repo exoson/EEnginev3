@@ -3,6 +3,8 @@ package mmserver
 import (
 	"context"
 	"fmt"
+	"math"
+	"strings"
 	"sync"
 	"time"
 
@@ -151,15 +153,54 @@ func (mm *mmServer) PollForMatch(ctx context.Context, req *api.PollForMatchReque
 }
 
 func (mm *mmServer) MatchResult(ctx context.Context, req *api.MatchResultRequest) (*api.MatchResultResponse, error) {
-	err := mm.db.UpdateMatchResult(req.Result)
 	mm.readyLock.Lock()
+	match := mm.readyMatches[req.Result.MatchId]
 	delete(mm.readyMatches, req.Result.MatchId)
 	mm.readyLock.Unlock()
+
+	err := mm.db.UpdateMatchResult(req.Result)
 	if err != nil {
 		return nil, err
-	} else {
-		return &api.MatchResultResponse{}, nil
 	}
+	type perf struct {
+		score          int64
+		originalRating int64
+	}
+	if strings.HasPrefix(req.Result.Result, "winner") {
+		perfs := []*perf{}
+		for _, player := range match.Players {
+			score := int64(0)
+			if strings.HasSuffix(req.Result.Result, player.Name) {
+				score = int64(1)
+			}
+			elo, err := mm.db.GetAccountElo(player)
+			if err != nil {
+				return nil, err
+			}
+			perfs = append(perfs, &perf{
+				score:          score,
+				originalRating: elo,
+			})
+		}
+		nameA := match.Players[0].Name
+		nameB := match.Players[1].Name
+		qa := math.Pow(float64(10), float64(perfs[0].originalRating)/400)
+		qb := math.Pow(float64(10), float64(perfs[1].originalRating)/400)
+		ea := qa / (qa + qb)
+		eb := qb / (qa + qb)
+		k := float64(32)
+		newA := perfs[0].originalRating + int64(k*(float64(perfs[0].score)-ea))
+		newB := perfs[1].originalRating + int64(k*(float64(perfs[1].score)-eb))
+		err := mm.db.UpdateAccountElo(&api.Player{Name: nameA, Elo: newA})
+		if err != nil {
+			return nil, err
+		}
+		err = mm.db.UpdateAccountElo(&api.Player{Name: nameB, Elo: newB})
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &api.MatchResultResponse{}, nil
 }
 
 func (mm *mmServer) ListPlayers(ctx context.Context, req *api.ListPlayersRequest) (*api.ListPlayersResponse, error) {

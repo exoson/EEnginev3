@@ -22,6 +22,8 @@ const (
 type Database interface {
 	CreateAccount(*api.Player) error
 	UpdateAccount(*api.Player) error
+	UpdateAccountElo(*api.Player) error
+	GetAccountElo(*api.Player) (int64, error)
 	AuthenticateAccount(*api.Player) (bool, error)
 	GetServerIp(string) (string, error)
 	CreateMatch(*api.Match, string) (string, error)
@@ -66,6 +68,30 @@ func (d *database) AuthenticateAccount(req *api.Player) (bool, error) {
 func (d *database) UpdateAccount(req *api.Player) error {
 	_, err := d.db.Exec("UPDATE tb_player SET password = crypt($1, gen_salt('bf', 8)) WHERE (name = $2);", req.Password, req.Name)
 	return err
+}
+
+func (d *database) UpdateAccountElo(req *api.Player) error {
+	_, err := d.db.Exec("UPDATE tb_player SET elo = $1 WHERE (name = $2);", req.Elo, req.Name)
+	return err
+}
+
+func (d *database) GetAccountElo(req *api.Player) (int64, error) {
+	rows, err := d.db.Query("SELECT elo FROM tb_player WHERE (name = $1);", req.Name)
+	if err != nil {
+		return int64(-1), err
+	}
+	defer rows.Close()
+	ok := rows.Next()
+	var elo int64
+	if ok {
+		err = rows.Scan(&elo)
+	} else {
+		err = fmt.Errorf("Failed to find player from table")
+	}
+	if err != nil {
+		return int64(-1), err
+	}
+	return elo, nil
 }
 
 func (d *database) GetServerIp(serverSecret string) (string, error) {
