@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"log"
@@ -9,7 +8,6 @@ import (
 	"os/exec"
 	"runtime"
 	"time"
-	"strings"
 
 	api "github.com/exoson/EEnginev3/api/proto/mmserver"
 	"github.com/golang/protobuf/proto"
@@ -46,16 +44,9 @@ func main() {
 		Name:     os.Args[1],
 		Password: os.Args[2],
 	}
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("truststore password: ")
-	tsPassword, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatal(err)
-	}
-	tsPassword = strings.Replace(tsPassword, "\n", "", -1)
+	tsPassword := "salasala"
 	tsFlag := fmt.Sprintf("-Djavax.net.ssl.trustStorePassword=%s", tsPassword)
 	ctx := context.Background()
-	mmServerClient.CreateAccount(ctx, &api.CreateAccountRequest{Player: player})
 	for {
 		req := &api.QueueRequest{
 			Player: player,
