@@ -8,6 +8,7 @@ public class UiObject {
     private ArrayList<UiObject> children;
 
     public UiObject() {
+        isDisplayed = true;
         children = new ArrayList<>();
     }
 

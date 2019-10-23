@@ -12,6 +12,7 @@ public class Text extends UiObject {
     private Textrenderer renderer;
 
     public Text(String str, int x, int y, Vector4f color) {
+        super();
         this.str = str;
         this.x = x;
         this.y = y;
