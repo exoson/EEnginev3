@@ -22,10 +22,11 @@ public class DeathMatch implements GameMode {
     @Override
     public void start() {
         uiRoot = new UiObject();
+        Main.getGame().setUi(uiRoot);
         map = new Map("");
         player0 = new PlayerInfo();
         player1 = new PlayerInfo();
-        uiRoot.addChild(new Text("", 10, 10, new Vector4f(1, 0, 0, 1)) {
+        uiRoot.addChild(new Text("", 20, 10, new Vector4f(1, 1, 1, 1)) {
             @Override
             public void updateText() {
                 player0.name = (String)Main.getGame().getFlag("player0");
@@ -36,7 +37,7 @@ public class DeathMatch implements GameMode {
                 str = player0.name + ": " + player0.points;
             }
         });
-        uiRoot.addChild(new Text("", 10, 100, new Vector4f(1, 0, 0, 1)) {
+        uiRoot.addChild(new Text("", 700, 10, new Vector4f(1, 1, 1, 1)) {
             @Override
             public void updateText() {
                 player1.name = (String)Main.getGame().getFlag("player1");
@@ -48,7 +49,7 @@ public class DeathMatch implements GameMode {
             }
         });
         Main.getGame().setFlag("powerUpIcon", "");
-        uiRoot.addChild(new Panel(10, 200) {
+        uiRoot.addChild(new Panel(400, 25) {
             String lastAnimation = "";
             @Override
             public void updateAnimation() {
@@ -70,14 +71,12 @@ public class DeathMatch implements GameMode {
             Main.getGame().setFlag("powerUpIcon", "powerupempty,default");
             return true;
         }
-        uiRoot.update();
         return false;
     }
 
     @Override
     public void render() {
         map.render();
-        uiRoot.render();
     }
 
     @Override

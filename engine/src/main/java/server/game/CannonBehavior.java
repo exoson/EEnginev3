@@ -37,6 +37,7 @@ public class CannonBehavior implements Behavior {
                 Main.getGame().addObject(createAmmo(go));
                 reloadDel.start();
                 go.setState("AmmoTemplate", "ammo");
+                Main.getGame().updateClient(clientName, "powerUpIcon:powerupempty,default");
             }
         }
     }

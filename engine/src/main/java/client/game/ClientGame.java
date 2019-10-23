@@ -21,12 +21,14 @@ import common.game.GameMode;
 public class ClientGame extends Game {
 
     private final Camera camera;
+    private UiObject uiRoot;
 
     private Client client;
 
     public ClientGame(GameMode gMode, String[] args) {
         super(gMode, "client");
         camera = new Camera(Matrix4f.identity());
+        camera.setPosition(new Vector3f(-Map.SQRSIZE/2,-70,0));
         try {
             client = new Client(args);
             Thread cThread = new Thread(client);
@@ -44,6 +46,9 @@ public class ClientGame extends Game {
         Input.update();
         client.sendMsg(Input.getKeys());
         super.update();
+        if (uiRoot != null) {
+            uiRoot.update();
+        }
     }
 
     @Override
@@ -57,6 +62,9 @@ public class ClientGame extends Game {
         }
 
         camera.disable();
+        if (uiRoot != null) {
+            uiRoot.render();
+        }
         Window.update();
     }
 
@@ -95,5 +103,9 @@ public class ClientGame extends Game {
 
     public void moveView(Vector3f vec) {
         getCamera().move(vec);
+    }
+
+    public void setUi(UiObject ui) {
+        uiRoot = ui;
     }
 }

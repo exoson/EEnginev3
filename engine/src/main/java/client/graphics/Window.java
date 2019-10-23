@@ -26,7 +26,7 @@ public class Window {
 
     private static long window;
 
-    private final static int WIDTH = 800, HEIGHT = 600;
+    private final static int WIDTH = 832, HEIGHT = 690;
 
     private final static String GAMENAME = "";
 
