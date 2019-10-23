@@ -46,6 +46,12 @@ public class DeathMatch implements GameMode {
                 str = player1.name + ": " + player1.points;
             }
         });
+        uiRoot.addChild(new Text("", 10, 200, new Vector4f(1, 0, 0, 1)) {
+            @Override
+            public void updateText() {
+                str = "" + (String)Main.getGame().getFlag("powerUpIcon");
+            }
+        });
     }
 
     @Override

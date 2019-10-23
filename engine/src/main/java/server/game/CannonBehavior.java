@@ -25,15 +25,18 @@ public class CannonBehavior implements Behavior {
 
     @Override
     public void update(Gameobject go) {
-        //if(go.getIsDead()) return;
+        if((boolean)go.getState("hit")) return;
 
         ammoTemplate = (String)go.getState("AmmoTemplate");
+        String clientName = (String)go.getState("client");
+        Main.getGame().updateClient(clientName, "powerup:"+ammoTemplate);
         if(Input.getKey(go, shootingKey)) {
             // @TODO implement this in some nicer way
             if(reloadDel.over()) {
                 Main.getGame().updateClients(go.getState("id") + ":CannonPlay:true");
                 Main.getGame().addObject(createAmmo(go));
                 reloadDel.start();
+                go.setState("AmmoTemplate", "ammo");
             }
         }
     }

@@ -14,7 +14,7 @@ public class AmmoPowerUpBehavior implements Behavior{
 
     @Override
     public void start(Gameobject go) {
-        pUpName = "shotgunAmmo";
+        pUpName = (String)go.getState("AmmoPowerUpBehaviorpUpName");
     }
 
     @Override
@@ -34,7 +34,9 @@ public class AmmoPowerUpBehavior implements Behavior{
         }
         ArrayList<Gameobject> colls = Physics.sphereCollide(tf, tf.getSX()/2, gos);
         for(Gameobject coll : colls) {
-           coll.setState("AmmoTemplate", pUpName);
+            coll.setState("AmmoTemplate", pUpName);
+            String clientName = (String)coll.getState("client");
+            Main.getGame().updateClient(clientName, "powerUpIcon:" +  go.getState("init"));
         }
         if(!colls.isEmpty()) {
             Main.getGame().removeObject((int)go.getState("id"));

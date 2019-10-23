@@ -1,4 +1,4 @@
 in;
 Transform:pos:0,0,0:rot:0,0,0:size:24,24,0;
 Animator:anims:powerupshotgun,default;
-AmmoPowerUpBehavior;
+AmmoPowerUpBehavior:pUpName:shotgunAmmo;

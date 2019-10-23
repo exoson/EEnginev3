@@ -68,7 +68,7 @@ public class ClientGame extends Game {
     public void updateStates(String updates) {
         //System.out.println(updates);
         for(String up : updates.split(";")) {
-            String[] split = up.split(":");
+            String[] split = up.split(":", 3);
             if(split.length == 1) {
                 continue;
             }
@@ -76,6 +76,7 @@ public class ClientGame extends Game {
                 int objId = Integer.parseInt(split[0]);
                 getObject(objId).setState(split[1], split[2]);
             } catch (Exception exc) {
+                split = up.split(":", 2);
                 setFlag(split[0], split[1]);
             }
         }
