@@ -2,6 +2,7 @@ package client.game;
 
 import common.game.GameMode;
 import common.game.Vector4f;
+import client.graphics.Animation;
 
 /**
  *
@@ -46,10 +47,18 @@ public class DeathMatch implements GameMode {
                 str = player1.name + ": " + player1.points;
             }
         });
-        uiRoot.addChild(new Text("", 10, 200, new Vector4f(1, 0, 0, 1)) {
+        Main.getGame().setFlag("powerUpIcon", "");
+        uiRoot.addChild(new Panel(10, 200) {
+            String lastAnimation = "";
             @Override
-            public void updateText() {
-                str = "" + (String)Main.getGame().getFlag("powerUpIcon");
+            public void updateAnimation() {
+                String curAnimation = (String)Main.getGame().getFlag("powerUpIcon");
+                if(!lastAnimation.equals(curAnimation)) {
+                    lastAnimation = curAnimation;
+                    String[] split = curAnimation.split(",");
+                    System.out.println(lastAnimation);
+                    animation = new Animation(split[0], split[1]);
+                }
             }
         });
     }
@@ -58,6 +67,7 @@ public class DeathMatch implements GameMode {
     public boolean update() {
         if("1".equals((String)Main.getGame().getFlag("res"))) {
             Main.getGame().setFlag("res", "0");
+            Main.getGame().setFlag("powerUpIcon", "powerupempty,default");
             return true;
         }
         uiRoot.update();

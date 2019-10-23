@@ -7,21 +7,29 @@ import client.graphics.Animation;
 
 public class Panel extends UiObject {
 
-    private int x, y;
     private Vector3f pos;
-    private Animation animation;
+    protected Animation animation;
 
-    public Panel(int x, int y, Animation animation) {
+    public Panel(int x, int y) {
         super();
         pos = new Vector3f(x, y, 0);
-        this.animation = animation;
     }
 
     @Override
     public void render() {
         super.render();
-        animation.render(pos, new Vector3f());
+        if (animation != null) {
+            animation.render(pos, new Vector3f());
+        }
     }
+
+    @Override
+    public void update() {
+        super.update();
+        updateAnimation();
+    }
+
+    public void updateAnimation() {}
 }
 
 

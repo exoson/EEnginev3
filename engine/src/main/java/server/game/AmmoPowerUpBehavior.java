@@ -36,7 +36,8 @@ public class AmmoPowerUpBehavior implements Behavior{
         for(Gameobject coll : colls) {
             coll.setState("AmmoTemplate", pUpName);
             String clientName = (String)coll.getState("client");
-            Main.getGame().updateClient(clientName, "powerUpIcon:" +  go.getState("init"));
+            String animations = (String)go.getState("Animatoranims");
+            Main.getGame().updateClient(clientName, "powerUpIcon:" + animations);
         }
         if(!colls.isEmpty()) {
             Main.getGame().removeObject((int)go.getState("id"));
