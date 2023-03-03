@@ -11,7 +11,7 @@ import (
 
 const (
 	host     = "localhost"
-	port     = 5432
+	port     = 5433
 	user     = "postgres"
 	password = "salasala"
 	dbname   = "db_mmserver"
@@ -50,8 +50,11 @@ func NewDatabase() (Database, error) {
 }
 
 func (d *database) CreateAccount(req *api.Player) error {
+	fmt.Println("PERKELE")
 	id := uuid.New()
 	_, err := d.db.Exec("INSERT INTO tb_player (id, name, password, elo) VALUES ( $1 , $2 , crypt( $3 , gen_salt('bf', 8)), $4 );", id.String(), req.Name, req.Password, DEFAULT_ELO)
+	
+	fmt.Println(err)
 	return err
 }
 

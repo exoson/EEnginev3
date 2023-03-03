@@ -32,7 +32,11 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(creds)}
+	_ = creds
+	opts := []grpc.DialOption{
+		grpc.WithInsecure(),
+		//grpc.WithTransportCredentials(creds)
+	}
 
 	err = gw.RegisterMatchMakingHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts)
 	if err != nil {

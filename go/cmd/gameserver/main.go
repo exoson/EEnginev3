@@ -31,7 +31,7 @@ func main() {
 	ksPassword = strings.Replace(ksPassword, "\n", "", -1)
 	ksFlag := fmt.Sprintf("-Djavax.net.ssl.keyStorePassword=%s", ksPassword)
 
-	mmServerAddress := "exxxooo.servegame.com:12321"
+	mmServerAddress := "localhost:12321"
 	if len(os.Args) > 1 {
 		mmServerAddress = os.Args[1]
 	}
@@ -41,10 +41,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	_ = creds
 
 	mmServerConnection, err := grpc.Dial(
 		mmServerAddress,
-		grpc.WithTransportCredentials(creds),
+		grpc.WithInsecure(),
+		//grpc.WithTransportCredentials(creds),
 	)
 	if err != nil {
 		log.Fatal(err)

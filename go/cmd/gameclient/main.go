@@ -20,7 +20,8 @@ var (
 )
 
 func main() {
-	mmServerAddress := "exxxooo.servegame.com:12321"
+    mmServerAddress := "85.188.34.25:12321"
+    mmServerAddress = "localhost:12321"
 	if len(os.Args) > 3 {
 		mmServerAddress = os.Args[3]
 	}
@@ -29,10 +30,12 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+    _ = creds
 
 	mmServerConnection, err := grpc.Dial(
 		mmServerAddress,
-		grpc.WithTransportCredentials(creds),
+		grpc.WithInsecure(),
+		//grpc.WithTransportCredentials(creds),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -66,7 +69,7 @@ func main() {
 			if runtime.GOOS == "darwin" {
 				flags = append(flags, "-XstartOnFirstThread")
 			}
-			lwjglNativeFlag := fmt.Sprintf("-Djava.library.path=%s/native", dir)
+			lwjglNativeFlag := fmt.Sprintf("-Djava.library.path=%s/third_party/lwjgl/native", dir)
 			flags = append(flags, tsFlag, lwjglNativeFlag, "-jar", "engine/src/main/java/client/game/client_deploy.jar", resp.Server.Ip, secret)
 			cmd := exec.Command("java", flags...)
 			out, err := cmd.CombinedOutput()

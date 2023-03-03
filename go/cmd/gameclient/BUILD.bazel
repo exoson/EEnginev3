@@ -6,6 +6,7 @@ go_library(
     data = [
         "//engine/src/main/java/client/game:client_deploy.jar",
         "//:cert",
+        "//third_party/lwjgl:natives",
     ],
     importpath = "github.com/exoson/EEnginev3/go/cmd/gameclient",
     visibility = ["//visibility:private"],
