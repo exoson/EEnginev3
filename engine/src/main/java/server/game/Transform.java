@@ -39,7 +39,7 @@ public class Transform extends TransformRoot {
 
     public boolean move(Vector3f vec) {
         position = position.add(vec);
-        if(((DeathMatch)Main.getGame().getgMode()).getMap().checkCollisionsAll(this)) {
+        if(isSolid && ((DeathMatch)Main.getGame().getgMode()).getMap().checkCollisionsAll(this)) {
             position = position.minus(vec);
             return false;
         }

@@ -65,8 +65,9 @@ public class Server implements Runnable {
     @Override
     public void run() {
         try {
-            System.setProperty("javax.net.ssl.keyStoreType", "jks");
-            Path keyStorePath = Paths.get(System.getProperty("user.dir"), "serverKeyStore.key");
+            //System.setProperty("javax.net.ssl.keyStoreType", "jks");
+            System.setProperty("java.protocol.handler.pkgs", "com.sun.net.ssl.internal.www.protocol");
+            Path keyStorePath = Paths.get("/home/exoman/EEnginev3/proKeystore");
             System.setProperty("javax.net.ssl.keyStore", keyStorePath.toString());
             SSLServerSocketFactory ssocketFactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
             SSLServerSocket ss = (SSLServerSocket) ssocketFactory.createServerSocket(12322);

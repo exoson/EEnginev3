@@ -105,6 +105,7 @@ public class Gameobject {
                 continue;
             }
             if(s.startsWith("file:")) {
+                System.out.println(s);
                 parseStateBehv(behaviors, state, fromFile(s.substring(5)), base);
                 continue;
             }
@@ -139,6 +140,7 @@ public class Gameobject {
 
     private static String fromFile(String fileName) {
         String fullDef = "";
+        System.out.println(fileName);
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(Gameobject.class.getResourceAsStream("/objects/" + fileName + ".obj")));
             String line;

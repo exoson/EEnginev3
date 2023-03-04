@@ -2,6 +2,7 @@ package server.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.*;
 import common.game.Delay;
 import common.game.GameMode;
 import common.game.Gameobject;
@@ -13,7 +14,7 @@ import common.game.Vector3f;
  */
 public class DeathMatch implements GameMode {
 
-    private static final int MAX_POINTS = 10;
+    private static final int MAX_POINTS = 20;
 
     private Map map;
 
@@ -59,11 +60,20 @@ public class DeathMatch implements GameMode {
             return false;
         }
 
-        if(Math.random() > 0.999) {
+        if(Math.random() > 0.990) {
             Vector3f pos = Vector3f.random()
                     .mult(new Vector3f((Map.WIDTH-5)*Map.SQRSIZE, (Map.HEIGHT-5)*Map.SQRSIZE, 0))
                     .add(new Vector3f(1.5f*Map.SQRSIZE, 1.5f*Map.SQRSIZE,0));
-            Main.getGame().addObject("in;file:powerup;Transform:pos:" + pos.toString());
+			String[] powerUps = new String[]{
+                "in;file:powerup;",
+                "in;file:powerupSniper;",
+            };
+            Random rng = new Random();
+            int idx = rng.nextInt(powerUps.length);
+            String powerUp = powerUps[idx];
+            System.out.println(powerUp);
+            //System.exit(1);
+            Main.getGame().addObject(powerUp + "Transform:pos:" + pos.toString());
         }
 
         ArrayList<String> clients = Main.getGame().getClientNames();
