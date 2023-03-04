@@ -13,6 +13,11 @@ public class Vector2f
         this.x = x;
         this.y = y;
     }
+    public Vector2f(String str) {
+        String[] splitted = str.split(",");
+        this.x = Float.parseFloat(splitted[0]);
+        this.y = Float.parseFloat(splitted[1]);
+    }
 
     public float length()
     {
