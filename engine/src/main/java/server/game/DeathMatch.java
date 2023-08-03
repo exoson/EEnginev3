@@ -67,6 +67,7 @@ public class DeathMatch implements GameMode {
 			String[] powerUps = new String[]{
                 "in;file:powerup;",
                 "in;file:powerupSniper;",
+                "in;file:powerupLaser;",
             };
             Random rng = new Random();
             int idx = rng.nextInt(powerUps.length);

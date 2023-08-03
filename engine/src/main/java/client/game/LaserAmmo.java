@@ -1,5 +1,9 @@
 package client.game;
 
+import java.util.ArrayList;
+import common.game.Vector2f;
+import common.game.Vector4f;
+import client.graphics.Renderer;
 import common.game.Behavior;
 import common.game.Gameobject;
 
@@ -19,10 +23,12 @@ public class LaserAmmo implements Behavior{
     public void update(Gameobject go) {
         points.clear();
         String pointsString = (String)go.getState("LaserAmmopoints");
-        String[] pointsSplit = pointsString.split(";");
-        for (int i = 0; i < pointsSplit.length-1; i++) {
-            points.add(new Vector2f(pointsSplit[i]));
-        }
+		if (pointsString != null) {
+			String[] pointsSplit = pointsString.split("/");
+			for (int i = 0; i < pointsSplit.length; i++) {
+				points.add(new Vector2f(pointsSplit[i]));
+			}
+		}
     }
 
     @Override
